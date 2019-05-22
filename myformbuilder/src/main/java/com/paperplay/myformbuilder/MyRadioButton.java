@@ -26,7 +26,7 @@ public class MyRadioButton extends LinearLayout{
     RadioGroup radioGroup;
     String value = null;
     View view;
-    HashMap<String, View> radioButtonList = new HashMap();
+    HashMap<String, RadioButton> radioButtonList = new HashMap();
 
     OnSelectedListener onSelectedListener;
     boolean nullable = false;
@@ -147,10 +147,6 @@ public class MyRadioButton extends LinearLayout{
         for (String option : optionListString){
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(option);
-            if(builder.selected!=null && option.equals(builder.selected)){
-                radioButton.setChecked(true);
-                this.value = builder.selected;
-            }
             if(builder.tintColorList == null) {
                 builder.tintColorList = new int[]{ContextCompat.getColor(context, R.color.dark_grey),
                         ContextCompat.getColor(context, R.color.dark_grey)};
@@ -169,6 +165,10 @@ public class MyRadioButton extends LinearLayout{
             radioButton.invalidate(); //could not be necessary
             radioGroup.addView(radioButton);
             radioButtonList.put(option, radioButton);
+        }
+        if(builder.selected!=null && radioButtonList.get(builder.selected)!=null){
+            radioButtonList.get(builder.selected).setChecked(true);
+            this.value = builder.selected;
         }
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
