@@ -1,31 +1,16 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.text.InputType;
-import android.text.method.KeyListener;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.utils.DateUtils;
+import com.paperplay.myformbuilder.function.ViewChecker;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
@@ -35,7 +20,7 @@ public class MyEdittextMultiple {
     Context context;
     Activity activity;
     HashMap<String, MyEdittext> edtList = new HashMap<>();
-    View view = null;
+    View view;
 
     public static class Builder{
         Context context;
@@ -107,6 +92,13 @@ public class MyEdittextMultiple {
 
     public HashMap<String, MyEdittext> getEdtList() {
         return edtList;
+    }
+
+    /**
+     * Check all edittext is empty or not
+     */
+    public boolean checkMustFilled(){
+        return ViewChecker.isFilled(this, this.context);
     }
 }
 

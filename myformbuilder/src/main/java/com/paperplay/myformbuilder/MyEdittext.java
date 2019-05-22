@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.method.KeyListener;
@@ -17,12 +18,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.customview.interfaces.GeneralBuilderInterface;
+import com.paperplay.myformbuilder.function.ViewChecker;
+import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
@@ -31,13 +33,13 @@ import java.util.Locale;
 public class MyEdittext extends LinearLayout{
     Context context;
     Activity activity;
-    TextView textViewQuestion;
-    EditText editTextAnswer;
-    View view = null;
+    TextView txtTitle;
+    EditText editTextContent;
+    View view;
 
     Calendar myCalendar = Calendar.getInstance();
     DateSetListener myDateSetListener;
-    boolean nullable = false;
+    boolean nullable;
 
     String title;
     String dateformat = "yyyy-MM-dd";
@@ -53,7 +55,7 @@ public class MyEdittext extends LinearLayout{
         SEARCH
     }
 
-    public static class Builder implements GeneralBuilderInterface<Builder>, Cloneable{
+    public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
         Activity activity;
         Context context;
@@ -157,7 +159,6 @@ public class MyEdittext extends LinearLayout{
         }
     }
 
-    @SuppressLint("NewApi")
     public MyEdittext(Builder builder) {
         super(builder.context, null, builder.defStyleAttr);
         this.context = builder.context;
@@ -168,20 +169,20 @@ public class MyEdittext extends LinearLayout{
         if(builder.mode == Mode.SEARCH){
             btnSearch = (ImageButton) this.view.findViewById(R.id.btnSearch);
             btnSearch.setVisibility(View.VISIBLE);
-            btnSearch.setOnClickListener(new View.OnClickListener() {
+            btnSearch.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(onClickSearchListener!=null)
-                        onClickSearchListener.onClickSearch(editTextAnswer.getText().toString());
+                        onClickSearchListener.onClickSearch(editTextContent.getText().toString());
                 }
             });
         }
         LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayout);
         layout.setOrientation(builder.orientation);
-        textViewQuestion = (TextView)view.findViewById(R.id.item_edittext_title);
-        editTextAnswer = (EditText)view.findViewById(R.id.item_edittext_value);
-        editTextAnswer.setMinLines(builder.minLines);
-        editTextAnswer.setTag(builder.title);
+        txtTitle = (TextView)view.findViewById(R.id.item_edittext_title);
+        editTextContent = (EditText)view.findViewById(R.id.item_edittext_value);
+        editTextContent.setMinLines(builder.minLines);
+        editTextContent.setTag(builder.title);
         if(builder.inputType == InputType.TYPE_CLASS_DATETIME) {
             if(dateformat!=null){
                 this.dateformat = builder.dateformat;
@@ -189,110 +190,40 @@ public class MyEdittext extends LinearLayout{
             datePickerDialog = new DatePickerDialog(activity, dateSetListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH));
-            editTextAnswer.setFocusableInTouchMode(false);
-            editTextAnswer.setOnClickListener(new View.OnClickListener() {
+            editTextContent.setFocusableInTouchMode(false);
+            editTextContent.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     datePickerDialog.show();
                 }
             });
-            editTextAnswer.setKeyListener(null);
-            editTextAnswer.setInputType(InputType.TYPE_NULL);
+            editTextContent.setKeyListener(null);
+            editTextContent.setInputType(InputType.TYPE_NULL);
         }else{
             if(builder.inputType != -1)
-                editTextAnswer.setInputType(builder.inputType);
+                editTextContent.setInputType(builder.inputType);
         }
 
         //set optional value
         if(builder.title!=null){
-            textViewQuestion.setText(builder.title);
+            txtTitle.setText(builder.title);
         }
-        if(builder.backgroundDrawable!=null){
-            editTextAnswer.setBackground(builder.backgroundDrawable);
+        if(builder.backgroundDrawable!=null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            editTextContent.setBackground(builder.backgroundDrawable);
         }
         if(builder.titleFont!=null){
             Typeface face = Typeface.createFromAsset(context.getAssets(),
                     builder.titleFont);
-            textViewQuestion.setTypeface(face);
+            txtTitle.setTypeface(face);
         }
         if(builder.titleColorResource != -1){
-            textViewQuestion.setTextColor(ContextCompat.getColor(context, builder.titleColorResource));
+            txtTitle.setTextColor(ContextCompat.getColor(context, builder.titleColorResource));
         }
     }
 
-//    @SuppressLint("NewApi")
-//    public MyEdittextDatepickerView(String title, Builder builder){
-//        this.title = title;
-//        this.context = builder.context;
-//        this.activity = builder.activity;
-//        this.dateformat = builder.dateformat;
-//        this.view  = LayoutInflater.from(context).inflate(R.layout.form_edittext, null);
-//        textViewTitle = (TextView)view.findViewById(R.id.item_edittext_title);
-//        textViewTitle.setText(title);
-//        editTextAnswer = (EditText)view.findViewById(R.id.item_edittext_value);
-//        editTextAnswer.setFocusableInTouchMode(false);
-//        datePickerDialog = new DatePickerDialog(activity, dateSetListener, myCalendar
-//                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                myCalendar.get(Calendar.DAY_OF_MONTH));
-//        editTextAnswer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                datePickerDialog.show();
-//            }
-//        });
-//        editTextAnswer.setKeyListener(null);
-//        editTextAnswer.setInputType(InputType.TYPE_NULL);
-//        if(this.backgroundDrawable!=null){
-//            editTextAnswer.setBackground(this.backgroundDrawable);
-//        }
-//    }
-//
-//    @SuppressLint("ValidFragment")
-//    public MyEdittextDatepickerView(Context context, String title, final Activity activity) {
-//        this.context = context;
-//        this.title = title;
-//        this.view  = LayoutInflater.from(context).inflate(R.layout.form_edittext, null);
-//        textViewTitle = (TextView)view.findViewById(R.id.item_edittext_title);
-//        textViewTitle.setText(title);
-//        editTextAnswer = (EditText)view.findViewById(R.id.item_edittext_value);
-//        editTextAnswer.setFocusableInTouchMode(false);
-//        editTextAnswer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new DatePickerDialog(activity, dateSetListener, myCalendar
-//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-//        editTextAnswer.setKeyListener(null);
-//        editTextAnswer.setInputType(InputType.TYPE_NULL);
-//    }
-//
-//    @SuppressLint("ValidFragment")
-//    public MyEdittextDatepickerView(Context context, String title, String dateformat, final Activity activity) {
-//        this.context = context;
-//        this.title = title;
-//        this.view  = LayoutInflater.from(context).inflate(R.layout.form_edittext, null);
-//        this.dateformat = dateformat;
-//        textViewTitle = (TextView)view.findViewById(R.id.item_edittext_title);
-//        textViewTitle.setText(title);
-//        editTextAnswer = (EditText)view.findViewById(R.id.item_edittext_value);
-//        editTextAnswer.setFocusableInTouchMode(false);
-//        editTextAnswer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new DatePickerDialog(activity, dateSetListener, myCalendar
-//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-//        editTextAnswer.setKeyListener(null);
-//        editTextAnswer.setInputType(InputType.TYPE_NULL);
-//    }
-
     @SuppressLint("NewApi")
     public void setBackground(Drawable drawable){
-        editTextAnswer.setBackground(drawable);
+        editTextContent.setBackground(drawable);
     }
 
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -307,7 +238,7 @@ public class MyEdittext extends LinearLayout{
                 dateformat = "yyyy-MM-dd";
             }
             SimpleDateFormat sdf = new SimpleDateFormat(dateformat, Locale.US);
-            editTextAnswer.setText(sdf.format(myCalendar.getTime()));
+            editTextContent.setText(sdf.format(myCalendar.getTime()));
 
             if(myDateSetListener!=null)
                 myDateSetListener.onDateSet(sdf.format(myCalendar.getTime()));
@@ -316,15 +247,15 @@ public class MyEdittext extends LinearLayout{
 
     public void setValue(String text){
         if(text != null)
-            editTextAnswer.setText(text);
+            editTextContent.setText(text);
     }
 
-    public TextView getTextViewQuestion() {
-        return textViewQuestion;
+    public TextView getTxtTitle() {
+        return txtTitle;
     }
 
-    public EditText getEditTextAnswer() {
-        return editTextAnswer;
+    public EditText getEditTextContent() {
+        return editTextContent;
     }
 
     public View getView() {
@@ -334,7 +265,7 @@ public class MyEdittext extends LinearLayout{
     public String getValue(){
         if(getView().getVisibility() == View.GONE)
             return null;
-        return String.valueOf(editTextAnswer.getText().toString());
+        return String.valueOf(editTextContent.getText().toString());
     }
 
     public interface DateSetListener{
@@ -354,20 +285,20 @@ public class MyEdittext extends LinearLayout{
     }
 
     public KeyListener getKeyListener(){
-        return editTextAnswer.getKeyListener();
+        return editTextContent.getKeyListener();
     }
 
     public void setEditable(boolean editable, KeyListener keyListener){
         if(editable){
-            editTextAnswer.setKeyListener(keyListener);
+            editTextContent.setKeyListener(keyListener);
         }else{
-            editTextAnswer.setKeyListener(null);
+            editTextContent.setKeyListener(null);
         }
     }
 
     public boolean isFilled() {
         if(!nullable){
-            if(editTextAnswer.getText().toString().isEmpty())
+            if(editTextContent.getText().toString().isEmpty())
                 return false;
         }
         return true;
@@ -386,5 +317,11 @@ public class MyEdittext extends LinearLayout{
     }
 
 
+    /**
+     * Check edittext is empty or not
+     */
+    public boolean checkMustFilled(){
+        return ViewChecker.isFilled(this, this.context);
+    }
 }
 

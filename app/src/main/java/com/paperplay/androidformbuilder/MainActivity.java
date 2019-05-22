@@ -9,13 +9,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.paperplay.myformbuilder.customview.MyCheckbox;
-import com.paperplay.myformbuilder.customview.MyEdittext;
-import com.paperplay.myformbuilder.customview.MyEdittextMultiple;
-import com.paperplay.myformbuilder.customview.MyRadioButton;
-import com.paperplay.myformbuilder.customview.MySpinner;
-import com.paperplay.myformbuilder.customview.MyTextView;
-import com.paperplay.myformbuilder.customview.function.ViewChecker;
+import com.paperplay.myformbuilder.MyCheckbox;
+import com.paperplay.myformbuilder.MyEdittext;
+import com.paperplay.myformbuilder.MyEdittextMultiple;
+import com.paperplay.myformbuilder.MyRadioButton;
+import com.paperplay.myformbuilder.MySpinner;
+import com.paperplay.myformbuilder.MyTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +26,6 @@ import java.util.LinkedHashMap;
  */
 public class MainActivity extends AppCompatActivity{
 
-    MyEdittext edtId, edtName, edtAddress, edtCity, edtBirthdate;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,29 +39,30 @@ public class MainActivity extends AppCompatActivity{
         /** Attach View **/
         try {
             //create edittext with search
-            edtId = edtTemplate.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
-            edtId.setOnClickSearchListener(keyword ->
-                    Toast.makeText(getBaseContext(), "Search: "+keyword, Toast.LENGTH_LONG).show());
+            MyEdittext edtId = new MyEdittext.Builder(MainActivity.this).setTitle("ID")
+                    .setMode(MyEdittext.Mode.SEARCH).create();
+            edtId.setOnClickSearchListener(keyword -> toast("Search: "+keyword));
             layout.addView(edtId.getView());
 
             //create general edittext
-            edtName = edtTemplate.clone().setTitle("Name").create();
+            MyEdittext edtName = new MyEdittext.Builder(MainActivity.this).setTitle("Name").create();
             layout.addView(edtName.getView());
 
             //create radio button
             MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this)
-                    .setTitle("Gender").setOptionList(new String[]{"Male", "Female"}).create();
+                    .setTitle("Gender").setOptionList(new String[]{"Male", "Female"}).setSelected("Female").create();
             layout.addView(rdbGender.getView());
 
             //create edittext + datepicker
-            edtBirthdate = edtTemplate.clone().setInputType(InputType.TYPE_CLASS_DATETIME)
+            MyEdittext edtBirthdate = new MyEdittext.Builder(MainActivity.this).setInputType(InputType.TYPE_CLASS_DATETIME)
                     .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
                     .setTitleColorResource(R.color.dark_grey)
                     .create();
             layout.addView(edtBirthdate.getView());
 
             //create edittext with 3 lines
-            edtAddress = edtTemplate.clone().setTitle("Address").setMinLines(3).create();
+            MyEdittext edtAddress = new MyEdittext.Builder(MainActivity.this)
+                    .setTitle("Address").setMinLines(3).create();
             layout.addView(edtAddress.getView());
 
             //create multiple edittext in one row
@@ -78,9 +77,9 @@ public class MainActivity extends AppCompatActivity{
             ArrayList<String> cityList = new ArrayList<>();
             cityList.add("Malang");
             cityList.add("Surabaya");
-            MySpinner mySpinnerView = new MySpinner.Builder(MainActivity.this)
-                    .setTitle("City").setItem(cityList).create();
-            layout.addView(mySpinnerView.getView());
+            MySpinner spinCity = new MySpinner.Builder(MainActivity.this)
+                    .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").create();
+            layout.addView(spinCity.getView());
 
             //create checkbox
             ArrayList<String> educationList = new ArrayList<>();
@@ -90,7 +89,8 @@ public class MainActivity extends AppCompatActivity{
             educationList.add("Doctoral");
             educationList.add("Professional");
             MyCheckbox myCheckboxView = new MyCheckbox.Builder(MainActivity.this)
-                    .setTitle("Education").setCheckBoxItem(educationList).create();
+                    .setTitle("Education").setCheckBoxItem(educationList)
+                    .setOnCheckedListener(s -> toast("select: "+s)).create();
             layout.addView(myCheckboxView.getView());
 
             //create textview
@@ -103,18 +103,23 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onClick(View view) {
                     //check not nullable form
-                    if(ViewChecker.checkEdittextFilled(edtName, getBaseContext()) && ViewChecker.checkEdittextFilled(edtMultiple, getBaseContext())) {
-                        Toast.makeText(getBaseContext(), "Name: " + edtName.getValue()
-                                + " Address: " + edtAddress.getValue()
-                                + " Birthdate: " + edtBirthdate.getValue()
-                                + " No: " + edtMultiple.getValue("No")
-                                + " Education: "+myCheckboxView.getAllChecked(), Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getBaseContext(), "Name: " + edtName.getValue()
+                            + " Gender: " + rdbGender.getValue()
+                            + " Address: " + edtAddress.getValue()
+                            + " Birthdate: " + edtBirthdate.getValue()
+                            + " No: " + edtMultiple.getValue("No")
+                            + " Zip: " + edtMultiple.getValue("Zip")
+                            + " City: " + spinCity.getValue()
+                            + " Education: "+myCheckboxView.getAllChecked(), Toast.LENGTH_LONG).show();
                 }
             });
 
         }catch (CloneNotSupportedException e){
             e.printStackTrace();
         }
+    }
+
+    void toast(String message){
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

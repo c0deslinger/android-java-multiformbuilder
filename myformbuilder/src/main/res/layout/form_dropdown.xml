@@ -11,8 +11,7 @@
         android:textColor="@color/textItem"
         android:id="@+id/item_spinner_title"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="Select" />
+        android:layout_marginBottom="4dp" />
 
     <Spinner
         android:background="@null"

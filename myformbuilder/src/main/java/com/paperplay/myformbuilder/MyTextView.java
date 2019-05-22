@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.customview.interfaces.GeneralBuilderInterface;
+import com.paperplay.myformbuilder.function.ViewChecker;
+import com.paperplay.myformbuilder.modules.GeneralBuilder;
+
+import java.util.function.Consumer;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
@@ -21,10 +23,9 @@ public class MyTextView extends LinearLayout{
     Activity activity;
     TextView textViewTitle;
     TextView textViewContent;
-    View view = null;
-    boolean notnull = false;
+    View view;
 
-    public static class Builder implements GeneralBuilderInterface<Builder>, Cloneable{
+    public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
         Activity activity;
         Context context;
@@ -137,30 +138,7 @@ public class MyTextView extends LinearLayout{
         }
     }
 
-//    public MyTextView(Context context, int row_layout_id, String title, int minLines) {
-//        this.context = context;
-//        this.title = title;
-//        this.view  = LayoutInflater.from(context).inflate(row_layout_id, null);
-//        textViewTitle = (TextView)view.findViewById(R.id.item_textview_title);
-//        textViewTitle.setText(title);
-//        textViewContent = (TextView)view.findViewById(R.id.item_textview_value);
-//        textViewContent.setMinLines(minLines);
-//        textViewContent.setTag(title);
-//    }
-//
-//    public MyTextView(Context context, String title, int minLines, int inputType) {
-//        this.context = context;
-//        this.title = title;
-//        this.view  = LayoutInflater.from(context).inflate(R.layout.form_textview, null);
-//        textViewTitle = (TextView)view.findViewById(R.id.item_edittext_title);
-//        textViewTitle.setText(title);
-//        textViewContent = (TextView)view.findViewById(R.id.item_edittext_value);
-//        textViewContent.setMinLines(minLines);
-//        textViewContent.setInputType(inputType);
-//        textViewContent.setTag(title);
-//    }
-
-    public void setValue(String text){
+    public void setContent(String text){
         textViewContent.setText(text);
     }
 
@@ -168,7 +146,7 @@ public class MyTextView extends LinearLayout{
         return view;
     }
 
-    public String getValue(){
+    public String getContent(){
         if(getView().getVisibility() == View.GONE)
             return null;
         return String.valueOf(textViewContent.getText().toString());
@@ -180,6 +158,14 @@ public class MyTextView extends LinearLayout{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public TextView getTextViewTitle() {
+        return textViewTitle;
+    }
+
+    public TextView getTextViewContent() {
+        return textViewContent;
     }
 
 }

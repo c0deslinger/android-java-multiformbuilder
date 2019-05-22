@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,11 +6,11 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.customview.interfaces.GeneralBuilderInterface;
+import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +22,13 @@ public class MyCheckbox extends LinearLayout{
     String title;
     Activity activity;
     Context context;
-    View view = null;
-    boolean nullable = true;
+    View view;
+    boolean nullable;
     ArrayList<String> checkBoxItem = new ArrayList<>();
     HashMap<String, CheckBox> checkBoxItemSelected = new HashMap<String, CheckBox>();
+    TextView txtTitle;
     
-    public static class Builder implements GeneralBuilderInterface<Builder>, Cloneable{
+    public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
         Activity activity;
         Context context;
@@ -41,6 +42,7 @@ public class MyCheckbox extends LinearLayout{
         int titleColorResource = -1;
         ArrayList<String> checkBoxItem = new ArrayList<>();
         int defStyleAttr = R.style.AppTheme;
+        OnCheckedListener onCheckedListener;
 
         public Builder() {
         }
@@ -98,6 +100,11 @@ public class MyCheckbox extends LinearLayout{
             return this;
         }
 
+        public Builder setOnCheckedListener(OnCheckedListener onCheckedListener) {
+            this.onCheckedListener = onCheckedListener;
+            return this;
+        }
+
         public MyCheckbox create(){
             return new MyCheckbox(this);
         }
@@ -117,7 +124,7 @@ public class MyCheckbox extends LinearLayout{
         this.view  = LayoutInflater.from(context).inflate(R.layout.form_base_layout, null);
         LinearLayout baseLayout = (LinearLayout)view.findViewById(R.id.baseLayout);
         baseLayout.setOrientation(builder.orientation);
-        TextView txtTitle = (TextView)view.findViewById(R.id.item_title);
+        txtTitle = (TextView)view.findViewById(R.id.item_title);
         txtTitle.setText(builder.title);
         for (String title : checkBoxItem){
             View itemView = LayoutInflater.from(context).inflate(R.layout.form_checkbox, null);
@@ -125,6 +132,13 @@ public class MyCheckbox extends LinearLayout{
             textViewQuestion.setText(title);
             CheckBox checkBoxAnswer = (CheckBox)itemView.findViewById(R.id.item_checkbox_value);
             checkBoxItemSelected.put(title, checkBoxAnswer);
+            checkBoxAnswer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
+                    if(selected)
+                        builder.onCheckedListener.onchecked(title);
+                }
+            });
             baseLayout.addView(itemView);
         }
     }
@@ -169,6 +183,7 @@ public class MyCheckbox extends LinearLayout{
         }
     }
 
+
     public String getTitle() {
         return title;
     }
@@ -179,5 +194,13 @@ public class MyCheckbox extends LinearLayout{
 
     public interface checkListener{
         boolean isChecked();
+    }
+
+    public TextView getTxtTitle() {
+        return txtTitle;
+    }
+
+    public interface OnCheckedListener{
+        void onchecked(String checkboxName);
     }
 }

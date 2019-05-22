@@ -1,6 +1,5 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -13,8 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.customview.interfaces.GeneralBuilderInterface;
+import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.util.HashMap;
 
@@ -24,19 +22,19 @@ import java.util.HashMap;
 public class MyRadioButton extends LinearLayout{
     Activity activity;
     Context context;
-    TextView textViewQuestion;
+    TextView txtTitle;
     RadioGroup radioGroup;
     String value = null;
-    View view = null;
+    View view;
     HashMap<String, View> radioButtonList = new HashMap();
 
-    MyRadioSelected myRadioSelected;
+    OnSelectedListener onSelectedListener;
     boolean nullable = false;
 
     String title;
     String[] optionListString;
 
-    public static class Builder implements GeneralBuilderInterface<Builder>, Cloneable{
+    public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
         Activity activity;
         Context context;
@@ -51,6 +49,7 @@ public class MyRadioButton extends LinearLayout{
         int optionColorResource = R.color.dark_grey;
         int defStyleAttr = R.style.AppTheme;
         boolean nullable = true;
+        String selected;
 
         public Builder() {
         }
@@ -118,6 +117,10 @@ public class MyRadioButton extends LinearLayout{
             return this;
         }
 
+        public Builder setSelected(String selected) {
+            this.selected = selected;
+            return this;
+        }
 
         public MyRadioButton create(){
             return new MyRadioButton(this);
@@ -136,14 +139,18 @@ public class MyRadioButton extends LinearLayout{
         this.title = builder.title;
         this.optionListString = builder.optionList;
         this.view  = LayoutInflater.from(builder.context).inflate(R.layout.form_radiobutton, null);
-        textViewQuestion = (TextView)view.findViewById(R.id.item_textview_title);
-        textViewQuestion.setText(title);
+        txtTitle = (TextView)view.findViewById(R.id.item_textview_title);
+        txtTitle.setText(title);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
         LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayout);
         layout.setOrientation(builder.orientation);
         for (String option : optionListString){
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(option);
+            if(builder.selected!=null && option.equals(builder.selected)){
+                radioButton.setChecked(true);
+                this.value = builder.selected;
+            }
             if(builder.tintColorList == null) {
                 builder.tintColorList = new int[]{ContextCompat.getColor(context, R.color.dark_grey),
                         ContextCompat.getColor(context, R.color.dark_grey)};
@@ -168,10 +175,17 @@ public class MyRadioButton extends LinearLayout{
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
                 value = radioButton.getText().toString();
-                if(myRadioSelected != null)
-                    myRadioSelected.selected(value);
+                if(onSelectedListener != null)
+                    onSelectedListener.selected(value);
             }
         });
+    }
+
+    public void setSelected(String selected){
+        if(selected!=null && radioButtonList.containsKey(selected)){
+            ((RadioButton)radioButtonList.get(selected)).setChecked(true);
+            this.value = selected;
+        }
     }
 
     public View getView() {
@@ -190,12 +204,12 @@ public class MyRadioButton extends LinearLayout{
         }
     }
 
-    public void setMyRadioSelected(MyRadioSelected myRadioSelected) {
-        this.myRadioSelected = myRadioSelected;
+    public void setOnSelectedListener(OnSelectedListener onSelectedListener) {
+        this.onSelectedListener = onSelectedListener;
     }
 
-    public interface MyRadioSelected{
-        public void selected(String value);
+    public interface OnSelectedListener {
+        void selected(String value);
     }
 
     public boolean isNullable() {
@@ -213,5 +227,14 @@ public class MyRadioButton extends LinearLayout{
         }
         return true;
     }
+
+    public TextView getTxtTitle() {
+        return txtTitle;
+    }
+
+    public RadioGroup getRadioGroup() {
+        return radioGroup;
+    }
+
 
 }

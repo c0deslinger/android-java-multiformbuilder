@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder.customview;
+package com.paperplay.myformbuilder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,25 +11,24 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.customview.interfaces.GeneralBuilderInterface;
+import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.util.ArrayList;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
  */
-public class MySpinner {
+public class MySpinner extends LinearLayout {
     String title;
     Context context;
-    TextView textViewQuestion;
+    TextView txtTitle;
     Spinner spinnerAnswer;
-    View view = null;
+    View view;
     ArrayList<String> item;
     boolean nullable = false;
-    SpinnerSelected spinnerSelected;
+    OnSelectedListener onSelectedListener;
     
-    public static class Builder implements GeneralBuilderInterface<Builder>, Cloneable {
+    public static class Builder implements GeneralBuilder<Builder>, Cloneable {
         //required
         Activity activity;
         Context context;
@@ -43,6 +42,7 @@ public class MySpinner {
         Drawable backgroundDrawable;
         int orientation = LinearLayout.VERTICAL;
         int defStyleAttr = R.style.AppTheme;
+        String defaultSelected = null;
 
         public Builder() {
         }
@@ -106,6 +106,11 @@ public class MySpinner {
             return this;
         }
 
+        public Builder setDefaultSelected(String defaultSelected) {
+            this.defaultSelected = defaultSelected;
+            return this;
+        }
+
         public MySpinner create(){
             return new MySpinner(this);
         }
@@ -118,13 +123,14 @@ public class MySpinner {
     }
 
     public MySpinner(Builder builder){
+        super(builder.context, null, builder.defStyleAttr);
         this.title = builder.title;
         this.context = builder.context;
         this.view  = LayoutInflater.from(context).inflate(R.layout.form_dropdown, null);
         LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayout);
         layout.setOrientation(builder.orientation);
-        textViewQuestion = (TextView)view.findViewById(R.id.item_spinner_title);
-        textViewQuestion.setText(title);
+        txtTitle = (TextView)view.findViewById(R.id.item_spinner_title);
+        txtTitle.setText(title);
         spinnerAnswer = (Spinner)view.findViewById(R.id.item_spinner_list);
         this.item = builder.item;
         ArrayAdapter arrayAdapter = new ArrayAdapter<String>(context,
@@ -133,8 +139,8 @@ public class MySpinner {
         spinnerAnswer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(spinnerSelected!=null)
-                    spinnerSelected.onSelected(item.get(i));
+                if(onSelectedListener !=null)
+                    onSelectedListener.onSelected(item.get(i));
             }
 
             @Override
@@ -142,18 +148,17 @@ public class MySpinner {
 
             }
         });
+        if(builder.defaultSelected != null){
+            setValue(builder.defaultSelected);
+        }
     }
 
-    public interface SpinnerSelected{
+    public interface OnSelectedListener {
         void onSelected(String value);
     }
 
-    public SpinnerSelected getSpinnerSelected() {
-        return spinnerSelected;
-    }
-
-    public void setSpinnerOnSelectedListener(SpinnerSelected spinnerSelected) {
-        this.spinnerSelected = spinnerSelected;
+    public void setSpinnerOnSelectedListener(OnSelectedListener onSelectedListener) {
+        this.onSelectedListener = onSelectedListener;
     }
 
     public int indexOfItem(String value){
@@ -186,5 +191,9 @@ public class MySpinner {
 
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    public TextView getTxtTitle() {
+        return txtTitle;
     }
 }

@@ -12,8 +12,7 @@
         android:textColor="@color/textItem"
         android:id="@+id/item_edittext_title"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Title" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"

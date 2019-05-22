@@ -1,13 +1,11 @@
-package com.paperplay.myformbuilder.customview.interfaces;
+package com.paperplay.myformbuilder.modules;
 
 import android.app.Activity;
-
-import java.util.List;
 
 /**
  * Created by Ahmed Yusuf on 20/05/19.
  */
-public interface GeneralBuilderInterface<T> {
+public interface GeneralBuilder<T> {
     T setActivity(Activity activity);
     T setTitle(String title);
     T setTitleFont(String title);
