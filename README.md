@@ -24,7 +24,7 @@ allprojects {
 - Add this to your app ```build.gradle```:
 ```gradle
 dependencies {
-  implementation 'com.github.c0deslinger:android-java-multiformbuilder:1.0.2'
+  implementation 'com.github.c0deslinger:android-java-multiformbuilder:1.0.3'
 }
 ```
 
@@ -126,7 +126,7 @@ Kotlin:
 var rdbGender = MyRadioButton.Builder(this@ExampleKotlinActivity).setFormLayout(formLayout)
                 .setTitle("Gender").setOptionList(arrayOf("Male", "Female")).setSelected("Female").create()
 ```
-ps: If you not define template builder on the beginning, you have to setFormLayout to attach view.
+Note: If you not define template builder on the beginning, you have to setFormLayout to attach view.
 
 - Create multiple EditText in a single row
 
