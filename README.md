@@ -28,49 +28,99 @@ dependencies {
 }
 ```
 
-# Example Usage (Java)
+# Example Usage 
 - Init your form layout:
+
+Java:
 ```java
 LinearLayout layout = (LinearLayout)findViewById(R.id.formLayout);
 ```
+Kotlin:
+```kotlin
+//pfft
+```
+
 -  Make template and set default value
+
+Java:
 ```java
 MyEdittext.Builder edtBuilder = new MyEdittext.Builder(MainActivity.this).setFormLayout(formLayout);
 ```
+Kotlin:
+```kotlin
+val edtBuilder = MyEdittext.Builder(this@ExampleKotlinActivity).setFormLayout(formLayout)
+```
 
 - Create EditText + Search Button
+
+Java:
 ```java
 MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
 edtId.setOnClickSearchListener(keyword -> toast("Search: "+keyword));
 ```
+Kotlin:
+ ```kotlin
+ var edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create()
+edtId.setOnClickSearchListener { keyword ->  toast("Search: $keyword") }
+```
 
 - Create EditText
+
+Java:
 ```java
 MyEdittext edtName = edtBuilder.clone().setTitle("Name").create();
 ```
+Kotlin:
+```kotlin
+var edtName = edtBuilder.clone().setTitle("Name").create()
+```
 
 - Create EditText with 3 lines
+
+Java:
 ```java
 MyEdittext edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create();
 ```
+Kotlin:
+```kotlin
+var edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create()
+```
 
 - Create EditText + datepicker
+
+Java:
 ```java
 MyEdittext edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME)
-                    .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
-                    .setTitleColorResource(R.color.dark_grey)
-                    .create();
+                .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
+                .setTitleColorResource(R.color.dark_grey)
+                .create();
+```
+Kotlin:
+```kotlin
+var edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME)
+                .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
+                .setTitleColorResource(R.color.dark_grey)
+                .create()
 ```
 
 - Create RadioButton
+
+Java:
 ```java
 MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this)
-                    .setTitle("Gender").setOptionList(new String[]{"Male", "Female"})
-                    .setFormLayout(formLayout).setSelected("Female").create();
+                .setTitle("Gender").setOptionList(new String[]{"Male", "Female"})
+                .setFormLayout(formLayout).setSelected("Female").create();
+```
+Kotlin:
+```kotlin
+var rdbGender = MyRadioButton.Builder(this@ExampleKotlinActivity).setFormLayout(formLayout)
+                .setTitle("Gender").setOptionList(arrayOf("Male", "Female")).setSelected("Female").create()
 ```
 ps: If you not define template builder on the beginning, you have to setFormLayout to attach view.
 
 - Create multiple EditText in a single row
+
+Java:
 ```java
 HashMap<String, MyEdittext> edtList = new LinkedHashMap<>();
 MyEdittext.Builder edtItemBuilder = new MyEdittext.Builder(MainActivity.this);
@@ -79,8 +129,19 @@ edtList.put("Zip", edtItemBuilder.clone().setTitle("Zip").setInputType(InputType
 MyEdittextMultiple edtMultiple = new MyEdittextMultiple.Builder(MainActivity.this, edtList)
             .setFormLayout(formLayout).setMargin(50).create();
 ```
+Kotlin:
+```kotlin
+var edtList = LinkedHashMap<String, MyEdittext>()
+var edtItemBuilder = MyEdittext.Builder(this@ExampleKotlinActivity)
+edtList.put("No", edtItemBuilder.clone().setTitle("No").setInputType(InputType.TYPE_CLASS_NUMBER).create())
+edtList.put("Zip", edtItemBuilder.clone().setTitle("No").setInputType(InputType.TYPE_CLASS_NUMBER).create())
+var edtMultiple = MyEdittextMultiple.Builder(this@ExampleKotlinActivity, edtList)
+        .setFormLayout(formLayout).setMargin(50).create()
+```
 
 - Create spinner view
+
+Java:
 ```java
 ArrayList<String> cityList = new ArrayList<>();
             cityList.add("Malang");
@@ -88,8 +149,18 @@ ArrayList<String> cityList = new ArrayList<>();
 MySpinner spinCity = new MySpinner.Builder(MainActivity.this)
         .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create();
 ```
+Kotlin:
+```kotlin
+val cityList = ArrayList<String>()
+          cityList.add("Malang")
+          cityList.add("Surabaya")
+var spinCity = MySpinner.Builder(this@ExampleKotlinActivity)
+        .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create()
+ ```
 
 - Create multiple checkbox
+
+Java:
 ```java
 ArrayList<String> educationList = new ArrayList<>();
 educationList.add("Associate");
@@ -99,31 +170,55 @@ MyCheckbox myCheckboxView = new MyCheckbox.Builder(MainActivity.this)
         .setTitle("Education").setCheckBoxItem(educationList)
         .setFormLayout(formLayout).setOnCheckedListener(selected -> toast("selected: "+selected)).create();
 ```
+Kotlin
+```kotlin
+val educationList = ArrayList<String>()
+educationList.add("Associate")
+educationList.add("Bachelor")
+educationList.add("Master")
+val myCheckboxView = MyCheckbox.Builder(this@ExampleKotlinActivity)
+        .setTitle("Education").setCheckBoxItem(educationList)
+        .setFormLayout(formLayout).setOnCheckedListener{ selected -> toast("selected: $selected") }.create()
+```
 
 - Create TextView
+
+Java:
 ```java
 MyTextView myTextView = new MyTextView.Builder(MainActivity.this)
                     .setTitle("Note:").setTitleFont("fonts/Roboto-Bold.ttf")
                     .setContent("Please check again before submit").setFormLayout(formLayout).create();
 ```
+Kotlin:
+```kotlin
+var myTextView = MyTextView.Builder(this@ExampleKotlinActivity)
+                .setTitle("Note:").setTitleFont("fonts/Roboto-Bold.ttf")
+                .setContent("Please check again before submit").setFormLayout(formLayout).create()
+```
 
 - Get values
+Java:
 ```java
 Button btnSubmit = (Button)findViewById(R.id.btnSubmit);
-btnSubmit.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        //check not nullable form
-        Toast.makeText(getBaseContext(), "Name: " + edtName.getValue()
+btnSubmit.setOnClickListener(view -> toast("Name: " + edtName.getValue()
+                    + " Gender: " + rdbGender.getValue()
+                    + " Address: " + edtAddress.getValue()
+                    + " Birthdate: " + edtBirthdate.getValue()
+                    + " No: " + edtMultiple.getValue("No")
+                    + " Zip: " + edtMultiple.getValue("Zip")
+                    + " City: " + spinCity.getValue()
+                    + " Education: "+myCheckboxView.getAllChecked()));
+```
+Kotlin:
+```kotlin
+btnSubmit.setOnClickListener{ view -> toast("Name: " + edtName.getValue()
                 + " Gender: " + rdbGender.getValue()
                 + " Address: " + edtAddress.getValue()
                 + " Birthdate: " + edtBirthdate.getValue()
                 + " No: " + edtMultiple.getValue("No")
                 + " Zip: " + edtMultiple.getValue("Zip")
                 + " City: " + spinCity.getValue()
-                + " Education: "+myCheckboxView.getAllChecked(), Toast.LENGTH_LONG).show();
-    }
-});
+                + " Education: "+myCheckboxView.getAllChecked())}
 ```
 
 # Contributing
