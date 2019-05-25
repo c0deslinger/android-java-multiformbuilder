@@ -53,6 +53,8 @@ val edtBuilder = MyEdittext.Builder(this@ExampleKotlinActivity).setFormLayout(fo
 
 - Create EditText + Search Button
 
+![alt text](https://raw.githubusercontent.com/c0deslinger/android-java-multiformbuilder/master/screenshots/Screen%20Shot%202019-05-24%20at%2023.14.14.png)
+
 Java:
 ```java
 MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
@@ -66,6 +68,8 @@ edtId.setOnClickSearchListener { keyword ->  toast("Search: $keyword") }
 
 - Create EditText
 
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-24%20at%2023.14.20.png?raw=true)
+
 Java:
 ```java
 MyEdittext edtName = edtBuilder.clone().setTitle("Name").create();
@@ -77,6 +81,8 @@ var edtName = edtBuilder.clone().setTitle("Name").create()
 
 - Create EditText with 3 lines
 
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.33.28.png?raw=true)
+
 Java:
 ```java
 MyEdittext edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create();
@@ -87,6 +93,8 @@ var edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create()
 ```
 
 - Create EditText + datepicker
+
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.33.23.png?raw=true)
 
 Java:
 ```java
@@ -105,6 +113,8 @@ var edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME
 
 - Create RadioButton
 
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-24%20at%2023.14.30.png?raw=true)
+
 Java:
 ```java
 MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this)
@@ -119,6 +129,8 @@ var rdbGender = MyRadioButton.Builder(this@ExampleKotlinActivity).setFormLayout(
 ps: If you not define template builder on the beginning, you have to setFormLayout to attach view.
 
 - Create multiple EditText in a single row
+
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.33.34.png?raw=true)
 
 Java:
 ```java
@@ -141,6 +153,9 @@ var edtMultiple = MyEdittextMultiple.Builder(this@ExampleKotlinActivity, edtList
 
 - Create spinner view
 
+
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.33.48.png?raw=true)
+
 Java:
 ```java
 ArrayList<String> cityList = new ArrayList<>();
@@ -159,6 +174,9 @@ var spinCity = MySpinner.Builder(this@ExampleKotlinActivity)
  ```
 
 - Create multiple checkbox
+
+
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.34.02.png?raw=true)
 
 Java:
 ```java
@@ -182,6 +200,9 @@ val myCheckboxView = MyCheckbox.Builder(this@ExampleKotlinActivity)
 ```
 
 - Create TextView
+
+
+![alt text](https://github.com/c0deslinger/android-java-multiformbuilder/blob/master/screenshots/Screen%20Shot%202019-05-25%20at%2011.34.09.png?raw=true)
 
 Java:
 ```java
