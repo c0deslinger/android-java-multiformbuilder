@@ -28,56 +28,56 @@ dependencies {
 }
 ```
 
-# Example Usage
+# Example Usage (Java)
 - Init your form layout:
 ```java
 LinearLayout layout = (LinearLayout)findViewById(R.id.formLayout);
 ```
+-  Make template and set default value
+```java
+MyEdittext.Builder edtBuilder = new MyEdittext.Builder(MainActivity.this).setFormLayout(formLayout);
+```
 
 - Create EditText + Search Button
 ```java
-MyEdittext edtId = new MyEdittext.Builder(MainActivity.this).setTitle("ID")
-                    .setMode(MyEdittext.Mode.SEARCH).create();
+MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
 edtId.setOnClickSearchListener(keyword -> toast("Search: "+keyword));
-layout.addView(edtId.getView());
 ```
 
 - Create EditText
 ```java
-MyEdittext edtName = new MyEdittext.Builder(MainActivity.this).setTitle("Name").create();
-layout.addView(edtName.getView());
+MyEdittext edtName = edtBuilder.clone().setTitle("Name").create();
 ```
 
 - Create EditText with 3 lines
 ```java
-MyEdittext edtAddress = new MyEdittext.Builder(MainActivity.this).setTitle("Address").setMinLines(3).create();
-layout.addView(edtAddress.getView());
+MyEdittext edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create();
 ```
 
 - Create EditText + datepicker
 ```java
-MyEdittext edtBirthdate = new MyEdittext.Builder(MainActivity.this).setInputType(InputType.TYPE_CLASS_DATETIME)
+MyEdittext edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME)
                     .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
                     .setTitleColorResource(R.color.dark_grey)
                     .create();
-layout.addView(edtBirthdate.getView());
 ```
 
 - Create RadioButton
 ```java
-MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this).setTitle("Gender")
-                    .setOptionList(new String[]{"Male", "Female"}).setSelected("Female").create();
-layout.addView(rdbGender.getView());
+MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this)
+                    .setTitle("Gender").setOptionList(new String[]{"Male", "Female"})
+                    .setFormLayout(formLayout).setSelected("Female").create();
 ```
+ps: If you not define template builder on the beginning, you have to setFormLayout to attach view.
 
 - Create multiple EditText in a single row
 ```java
 HashMap<String, MyEdittext> edtList = new LinkedHashMap<>();
-            edtList.put("No", edtTemplate.clone().setTitle("No").setInputType(InputType.TYPE_CLASS_NUMBER).create());
-            edtList.put("Zip", edtTemplate.clone().setTitle("Zip").setInputType(InputType.TYPE_CLASS_NUMBER).create());
+MyEdittext.Builder edtItemBuilder = new MyEdittext.Builder(MainActivity.this);
+edtList.put("No", edtItemBuilder.clone().setTitle("No").setInputType(InputType.TYPE_CLASS_NUMBER).create());
+edtList.put("Zip", edtItemBuilder.clone().setTitle("Zip").setInputType(InputType.TYPE_CLASS_NUMBER).create());
 MyEdittextMultiple edtMultiple = new MyEdittextMultiple.Builder(MainActivity.this, edtList)
-        .setMargin(50).create();
-layout.addView(edtMultiple.getView());
+            .setFormLayout(formLayout).setMargin(50).create();
 ```
 
 - Create spinner view
@@ -85,28 +85,26 @@ layout.addView(edtMultiple.getView());
 ArrayList<String> cityList = new ArrayList<>();
             cityList.add("Malang");
             cityList.add("Surabaya");
-MySpinner spinCity = new MySpinner.Builder(MainActivity.this).setTitle("City").setItem(cityList)
-           .setDefaultSelected("Surabaya").create();
-layout.addView(spinCity.getView());
+MySpinner spinCity = new MySpinner.Builder(MainActivity.this)
+        .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create();
 ```
 
 - Create multiple checkbox
 ```java
 ArrayList<String> educationList = new ArrayList<>();
-            educationList.add("Associate");
-            educationList.add("Bachelor");
-            educationList.add("Master");
-MyCheckbox myCheckboxView = new MyCheckbox.Builder(MainActivity.this).setTitle("Education")
-            .setCheckBoxItem(educationList).create();
-layout.addView(myCheckboxView.getView());
+educationList.add("Associate");
+educationList.add("Bachelor");
+educationList.add("Master");
+MyCheckbox myCheckboxView = new MyCheckbox.Builder(MainActivity.this)
+        .setTitle("Education").setCheckBoxItem(educationList)
+        .setFormLayout(formLayout).setOnCheckedListener(selected -> toast("selected: "+selected)).create();
 ```
 
 - Create TextView
 ```java
-MyTextView myTextView = new MyTextView.Builder(MainActivity.this).setTitle("Note:")
-                    .setTitleFont("fonts/Roboto-Bold.ttf")
-                    .setContent("Please check again before submit").create();
-layout.addView(myTextView.getView());
+MyTextView myTextView = new MyTextView.Builder(MainActivity.this)
+                    .setTitle("Note:").setTitleFont("fonts/Roboto-Bold.ttf")
+                    .setContent("Please check again before submit").setFormLayout(formLayout).create();
 ```
 
 - Get values
