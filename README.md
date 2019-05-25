@@ -40,7 +40,7 @@ Kotlin:
 //pfft
 ```
 
--  Make template and set default value
+-  Make template view builder and set default value
 
 Java:
 ```java
