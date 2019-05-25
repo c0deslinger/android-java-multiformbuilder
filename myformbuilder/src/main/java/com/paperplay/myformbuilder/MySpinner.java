@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class MySpinner extends LinearLayout {
     String title;
     Context context;
+    LinearLayout formLayout;
     TextView txtTitle;
     Spinner spinnerAnswer;
     View view;
@@ -43,6 +44,7 @@ public class MySpinner extends LinearLayout {
         int orientation = LinearLayout.VERTICAL;
         int defStyleAttr = R.style.AppTheme;
         String defaultSelected = null;
+        LinearLayout formLayout;
 
         public Builder() {
         }
@@ -56,6 +58,12 @@ public class MySpinner extends LinearLayout {
         public Builder setActivity(Activity activity) {
             this.activity = activity;
             this.context = activity.getBaseContext();
+            return this;
+        }
+
+        @Override
+        public Builder setFormLayout(LinearLayout formLayout){
+            this.formLayout = formLayout;
             return this;
         }
 
@@ -151,6 +159,10 @@ public class MySpinner extends LinearLayout {
         if(builder.defaultSelected != null){
             setValue(builder.defaultSelected);
         }
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     public interface OnSelectedListener {
@@ -179,6 +191,14 @@ public class MySpinner extends LinearLayout {
         if(this.view.getVisibility() == View.VISIBLE)
             return String.valueOf(spinnerAnswer.getSelectedItem());
         else return null;
+    }
+
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
+
+    public void detachView(){
+        formLayout.removeView(this.view);
     }
 
     public int getIndexSelected(){

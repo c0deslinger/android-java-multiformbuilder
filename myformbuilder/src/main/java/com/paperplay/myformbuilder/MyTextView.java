@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 public class MyTextView extends LinearLayout{
     String title;
     Context context;
+    LinearLayout formLayout;
     Activity activity;
     TextView textViewTitle;
     TextView textViewContent;
@@ -29,6 +30,7 @@ public class MyTextView extends LinearLayout{
         //required
         Activity activity;
         Context context;
+        LinearLayout formLayout;
 
         //optional
         String title;
@@ -52,6 +54,12 @@ public class MyTextView extends LinearLayout{
         public Builder setActivity(Activity activity) {
             this.activity = activity;
             this.context = activity.getBaseContext();
+            return this;
+        }
+
+        @Override
+        public Builder setFormLayout(LinearLayout formLayout){
+            this.formLayout = formLayout;
             return this;
         }
 
@@ -136,6 +144,10 @@ public class MyTextView extends LinearLayout{
         if(builder.titleColorResource != -1){
             textViewTitle.setTextColor(ContextCompat.getColor(context, builder.titleColorResource));
         }
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     public void setContent(String text){
@@ -166,6 +178,14 @@ public class MyTextView extends LinearLayout{
 
     public TextView getTextViewContent() {
         return textViewContent;
+    }
+
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
+
+    public void detachView(){
+        formLayout.removeView(this.view);
     }
 
 }

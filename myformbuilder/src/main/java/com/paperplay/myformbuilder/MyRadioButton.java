@@ -23,6 +23,7 @@ public class MyRadioButton extends LinearLayout{
     Activity activity;
     Context context;
     TextView txtTitle;
+    LinearLayout formLayout;
     RadioGroup radioGroup;
     String value = null;
     View view;
@@ -50,6 +51,7 @@ public class MyRadioButton extends LinearLayout{
         int defStyleAttr = R.style.AppTheme;
         boolean nullable = true;
         String selected;
+        LinearLayout formLayout;
 
         public Builder() {
         }
@@ -63,6 +65,12 @@ public class MyRadioButton extends LinearLayout{
         public Builder setActivity(Activity activity) {
             this.activity = activity;
             this.context = activity.getBaseContext();
+            return this;
+        }
+
+        @Override
+        public Builder setFormLayout(LinearLayout formLayout){
+            this.formLayout = formLayout;
             return this;
         }
 
@@ -179,6 +187,10 @@ public class MyRadioButton extends LinearLayout{
                     onSelectedListener.selected(value);
             }
         });
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     public void setSelected(String selected){
@@ -235,6 +247,12 @@ public class MyRadioButton extends LinearLayout{
     public RadioGroup getRadioGroup() {
         return radioGroup;
     }
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
 
+    public void detachView(){
+        formLayout.removeView(this.view);
+    }
 
 }

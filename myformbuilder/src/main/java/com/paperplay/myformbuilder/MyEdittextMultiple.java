@@ -19,12 +19,14 @@ import java.util.Iterator;
 public class MyEdittextMultiple {
     Context context;
     Activity activity;
+    LinearLayout formLayout;
     HashMap<String, MyEdittext> edtList = new HashMap<>();
     View view;
 
     public static class Builder{
         Context context;
         Activity activity;
+        LinearLayout formLayout;
         HashMap<String, MyEdittext> edtList = new HashMap<>();
         int margin;
 
@@ -35,6 +37,22 @@ public class MyEdittextMultiple {
             this.context = activity.getBaseContext();
             this.activity = activity;
             this.edtList = edtList;
+        }
+
+        public Builder setActivity(Activity activity) {
+            this.activity = activity;
+            this.context = activity.getBaseContext();
+            return this;
+        }
+
+        public Builder setEdtList(HashMap<String, MyEdittext> edtList){
+            this.edtList = edtList;
+            return this;
+        }
+
+        public Builder setFormLayout(LinearLayout formLayout) {
+            this.formLayout = formLayout;
+            return this;
         }
 
         public Builder setMargin(int margin){
@@ -78,6 +96,10 @@ public class MyEdittextMultiple {
             isFirst = false;
         }
         this.view = linearLayout;
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     public String getValue(String key){
@@ -99,6 +121,14 @@ public class MyEdittextMultiple {
      */
     public boolean checkMustFilled(){
         return ViewChecker.isFilled(this, this.context);
+    }
+
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
+
+    public void detachView(){
+        formLayout.removeView(this.view);
     }
 }
 

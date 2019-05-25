@@ -27,11 +27,13 @@ public class MyCheckbox extends LinearLayout{
     ArrayList<String> checkBoxItem = new ArrayList<>();
     HashMap<String, CheckBox> checkBoxItemSelected = new HashMap<String, CheckBox>();
     TextView txtTitle;
+    LinearLayout formLayout;
     
     public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
         Activity activity;
         Context context;
+        LinearLayout formLayout;
 
         //optional
         String title;
@@ -56,6 +58,12 @@ public class MyCheckbox extends LinearLayout{
         public Builder setActivity(Activity activity) {
             this.activity = activity;
             this.context = activity.getBaseContext();
+            return this;
+        }
+
+        @Override
+        public Builder setFormLayout(LinearLayout formLayout){
+            this.formLayout = formLayout;
             return this;
         }
 
@@ -141,6 +149,10 @@ public class MyCheckbox extends LinearLayout{
             });
             baseLayout.addView(itemView);
         }
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     public void setValue(String key, boolean value){
@@ -203,4 +215,13 @@ public class MyCheckbox extends LinearLayout{
     public interface OnCheckedListener{
         void onchecked(String checkboxName);
     }
+
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
+
+    public void detachView(){
+        formLayout.removeView(this.view);
+    }
+
 }

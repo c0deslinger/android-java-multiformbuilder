@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 public class MyEdittext extends LinearLayout{
     Context context;
     Activity activity;
+    LinearLayout formLayout;
     TextView txtTitle;
     EditText editTextContent;
     View view;
@@ -61,6 +62,7 @@ public class MyEdittext extends LinearLayout{
         Context context;
 
         //optional
+        LinearLayout formLayout;
         String title;
         int minLines;
         String dateformat;
@@ -121,6 +123,12 @@ public class MyEdittext extends LinearLayout{
         @Override
         public Builder setDefStyleAttr(int defStyleAttr) {
             this.defStyleAttr = defStyleAttr;
+            return this;
+        }
+
+        @Override
+        public Builder setFormLayout(LinearLayout formLayout){
+            this.formLayout = formLayout;
             return this;
         }
 
@@ -219,6 +227,10 @@ public class MyEdittext extends LinearLayout{
         if(builder.titleColorResource != -1){
             txtTitle.setTextColor(ContextCompat.getColor(context, builder.titleColorResource));
         }
+        if(builder.formLayout!=null){
+            this.formLayout = builder.formLayout;
+            this.formLayout.addView(this.view);
+        }
     }
 
     @SuppressLint("NewApi")
@@ -316,6 +328,13 @@ public class MyEdittext extends LinearLayout{
         this.onClickSearchListener = onClickSearchListener;
     }
 
+    public void attachView(){
+        formLayout.addView(this.view);
+    }
+
+    public void detachView(){
+        formLayout.removeView(this.view);
+    }
 
     /**
      * Check edittext is empty or not
