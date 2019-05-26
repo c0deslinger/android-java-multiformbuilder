@@ -33,7 +33,7 @@ dependencies {
 
 Java:
 ```java
-LinearLayout layout = (LinearLayout)findViewById(R.id.formLayout);
+LinearLayout formLayout = (LinearLayout)findViewById(R.id.formLayout);
 ```
 Kotlin:
 ```kotlin
