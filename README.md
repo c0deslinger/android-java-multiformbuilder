@@ -44,7 +44,7 @@ Kotlin:
 
 Java:
 ```java
-MyEdittext.Builder edtBuilder = new MyEdittext.Builder(MainActivity.this).setFormLayout(formLayout);
+MyEdittext.Builder edtBuilder = new MyEdittext.Builder(ExampleJavaActivity.this).setFormLayout(formLayout);
 ```
 Kotlin:
 ```kotlin
@@ -117,7 +117,7 @@ var edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME
 
 Java:
 ```java
-MyRadioButton rdbGender = new MyRadioButton.Builder(MainActivity.this)
+MyRadioButton rdbGender = new MyRadioButton.Builder(ExampleJavaActivity.this)
                 .setTitle("Gender").setOptionList(new String[]{"Male", "Female"})
                 .setFormLayout(formLayout).setSelected("Female").create();
 ```
@@ -135,10 +135,10 @@ Note: If you not define template builder on the beginning, you have to setFormLa
 Java:
 ```java
 HashMap<String, MyEdittext> edtList = new LinkedHashMap<>();
-MyEdittext.Builder edtItemBuilder = new MyEdittext.Builder(MainActivity.this);
+MyEdittext.Builder edtItemBuilder = new MyEdittext.Builder(ExampleJavaActivity.this);
 edtList.put("No", edtItemBuilder.clone().setTitle("No").setInputType(InputType.TYPE_CLASS_NUMBER).create());
 edtList.put("Zip", edtItemBuilder.clone().setTitle("Zip").setInputType(InputType.TYPE_CLASS_NUMBER).create());
-MyEdittextMultiple edtMultiple = new MyEdittextMultiple.Builder(MainActivity.this, edtList)
+MyEdittextMultiple edtMultiple = new MyEdittextMultiple.Builder(ExampleJavaActivity.this, edtList)
             .setFormLayout(formLayout).setMargin(50).create();
 ```
 Kotlin:
@@ -161,7 +161,7 @@ Java:
 ArrayList<String> cityList = new ArrayList<>();
             cityList.add("Malang");
             cityList.add("Surabaya");
-MySpinner spinCity = new MySpinner.Builder(MainActivity.this)
+MySpinner spinCity = new MySpinner.Builder(ExampleJavaActivity.this)
         .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create();
 ```
 Kotlin:
@@ -184,7 +184,7 @@ ArrayList<String> educationList = new ArrayList<>();
 educationList.add("Associate");
 educationList.add("Bachelor");
 educationList.add("Master");
-MyCheckbox myCheckboxView = new MyCheckbox.Builder(MainActivity.this)
+MyCheckbox myCheckboxView = new MyCheckbox.Builder(ExampleJavaActivity.this)
         .setTitle("Education").setCheckBoxItem(educationList)
         .setFormLayout(formLayout).setOnCheckedListener(selected -> toast("selected: "+selected)).create();
 ```
@@ -206,7 +206,7 @@ val myCheckboxView = MyCheckbox.Builder(this@ExampleKotlinActivity)
 
 Java:
 ```java
-MyTextView myTextView = new MyTextView.Builder(MainActivity.this)
+MyTextView myTextView = new MyTextView.Builder(ExampleJavaActivity.this)
                     .setTitle("Note:").setTitleFont("fonts/Roboto-Bold.ttf")
                     .setContent("Please check again before submit").setFormLayout(formLayout).create();
 ```
