@@ -163,8 +163,8 @@ public class MyRadioButton extends LinearLayout{
         txtTitle = view.findViewById(R.id.item_textview_title);
         txtTitle.setText(title);
         radioGroup =  view.findViewById(R.id.radioGroup);
-        mainLayout =  this.view.findViewById(R.id.mainLayoutRadioButton);
-        mainLayout.setOrientation(builder.orientation);
+//        mainLayout =  this.view.findViewById(R.id.mainLayoutRadioButton);
+//        mainLayout.setOrientation(builder.orientation);
         for (String option : optionListString){
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(option);

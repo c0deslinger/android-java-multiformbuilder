@@ -130,8 +130,8 @@ public class MyTextView extends LinearLayout{
         this.activity = builder.activity;
         this.title = builder.title;
         this.view  = LayoutInflater.from(context).inflate(R.layout.form_textview, null);
-        mainLayout =  this.view.findViewById(R.id.mainLayoutTextview);
-        mainLayout.setOrientation(builder.orientation);
+//        mainLayout =  this.view.findViewById(R.id.mainLayoutTextview);
+//        mainLayout.setOrientation(builder.orientation);
         textViewTitle = view.findViewById(R.id.item_textview_title);
         textViewTitle.setText(builder.title);
         textViewContent = view.findViewById(R.id.item_textview_value);
