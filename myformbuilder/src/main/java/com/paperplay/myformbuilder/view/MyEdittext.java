@@ -34,6 +34,7 @@ public class MyEdittext extends LinearLayout{
     Context context;
     Activity activity;
     LinearLayout formLayout;
+    LinearLayout mainLayout;
     TextView txtTitle;
     EditText editTextContent;
     View view;
@@ -193,8 +194,8 @@ public class MyEdittext extends LinearLayout{
                     onClickSearchListener.onClickSearch(editTextContent.getText().toString());
             });
         }
-        LinearLayout layout = this.view.findViewById(R.id.mainLayoutEdittext);
-        layout.setOrientation(builder.orientation);
+        mainLayout = this.view.findViewById(R.id.mainLayoutEdittext);
+        mainLayout.setOrientation(builder.orientation);
         txtTitle = view.findViewById(R.id.item_edittext_title);
         editTextContent = view.findViewById(R.id.item_edittext_value);
         editTextContent.setMinLines(builder.minLines);

@@ -19,6 +19,7 @@ public class MyTextView extends LinearLayout{
     String title;
     Context context;
     LinearLayout formLayout;
+    LinearLayout mainLayout;
     Activity activity;
     TextView textViewTitle;
     TextView textViewContent;
@@ -129,11 +130,11 @@ public class MyTextView extends LinearLayout{
         this.activity = builder.activity;
         this.title = builder.title;
         this.view  = LayoutInflater.from(context).inflate(R.layout.form_textview, null);
-        LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayoutTextview);
-        layout.setOrientation(builder.orientation);
-        textViewTitle = (TextView)view.findViewById(R.id.item_textview_title);
+        mainLayout =  this.view.findViewById(R.id.mainLayoutTextview);
+        mainLayout.setOrientation(builder.orientation);
+        textViewTitle = view.findViewById(R.id.item_textview_title);
         textViewTitle.setText(builder.title);
-        textViewContent = (TextView)view.findViewById(R.id.item_textview_value);
+        textViewContent = view.findViewById(R.id.item_textview_value);
         textViewContent.setText(builder.content);
         if(builder.titleFont!=null){
             Typeface face = Typeface.createFromAsset(context.getAssets(),

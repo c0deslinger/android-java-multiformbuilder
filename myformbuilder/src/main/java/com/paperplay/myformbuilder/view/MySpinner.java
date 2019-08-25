@@ -24,6 +24,7 @@ public class MySpinner extends LinearLayout {
     String title;
     Context context;
     LinearLayout formLayout;
+    LinearLayout mainLayout;
     TextView txtTitle;
     Spinner spinnerAnswer;
     View view;
@@ -155,8 +156,8 @@ public class MySpinner extends LinearLayout {
         }else {
             this.view = LayoutInflater.from(context).inflate(R.layout.form_dropdown, null);
         }
-        LinearLayout layout = this.view.findViewById(R.id.mainLayoutDropdown);
-        layout.setOrientation(builder.orientation);
+        mainLayout = view.findViewById(R.id.mainLayoutDropdown);
+        mainLayout.setOrientation(builder.orientation);
         txtTitle = view.findViewById(R.id.item_spinner_title);
         txtTitle.setText(title);
         spinnerAnswer = view.findViewById(R.id.item_spinner_list);

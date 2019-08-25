@@ -25,6 +25,7 @@ public class MyRadioButton extends LinearLayout{
     Context context;
     TextView txtTitle;
     LinearLayout formLayout;
+    LinearLayout mainLayout;
     RadioGroup radioGroup;
     String value = null;
     View view;
@@ -162,8 +163,8 @@ public class MyRadioButton extends LinearLayout{
         txtTitle = view.findViewById(R.id.item_textview_title);
         txtTitle.setText(title);
         radioGroup =  view.findViewById(R.id.radioGroup);
-        LinearLayout layout =  this.view.findViewById(R.id.mainLayoutRadioButton);
-        layout.setOrientation(builder.orientation);
+        mainLayout =  this.view.findViewById(R.id.mainLayoutRadioButton);
+        mainLayout.setOrientation(builder.orientation);
         for (String option : optionListString){
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(option);
