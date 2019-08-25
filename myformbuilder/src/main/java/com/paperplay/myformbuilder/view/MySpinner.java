@@ -211,7 +211,6 @@ public class MySpinner extends LinearLayout {
 
     public void setValue(String value){
         if(value != null) {
-            System.out.println("set value: "+value);
             SpinnerData spinnerData = null;
             for (SpinnerData data : itemDropDown){
                 if(data.getValue().equals(value)) {
@@ -285,7 +284,6 @@ public class MySpinner extends LinearLayout {
         for (SpinnerData items : item){
             if(items.getId() == id){
                 items.setHidden(true);
-                System.out.println("hide: "+items.getId());
                 break;
             }
         }
