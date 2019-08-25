@@ -155,7 +155,7 @@ public class MySpinner extends LinearLayout {
         }else {
             this.view = LayoutInflater.from(context).inflate(R.layout.form_dropdown, null);
         }
-        LinearLayout layout = this.view.findViewById(R.id.mainLayout);
+        LinearLayout layout = this.view.findViewById(R.id.mainLayoutDropdown);
         layout.setOrientation(builder.orientation);
         txtTitle = view.findViewById(R.id.item_spinner_title);
         txtTitle.setText(title);

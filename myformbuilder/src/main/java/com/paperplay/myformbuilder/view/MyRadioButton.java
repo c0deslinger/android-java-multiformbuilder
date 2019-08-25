@@ -159,10 +159,10 @@ public class MyRadioButton extends LinearLayout{
         }else {
             this.view = LayoutInflater.from(builder.context).inflate(R.layout.form_radiobutton, null);
         }
-        txtTitle = (TextView)view.findViewById(R.id.item_textview_title);
+        txtTitle = view.findViewById(R.id.item_textview_title);
         txtTitle.setText(title);
-        radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-        LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayout);
+        radioGroup =  view.findViewById(R.id.radioGroup);
+        LinearLayout layout =  this.view.findViewById(R.id.mainLayoutRadioButton);
         layout.setOrientation(builder.orientation);
         for (String option : optionListString){
             RadioButton radioButton = new RadioButton(context);
