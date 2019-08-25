@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder;
+package com.paperplay.myformbuilder.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

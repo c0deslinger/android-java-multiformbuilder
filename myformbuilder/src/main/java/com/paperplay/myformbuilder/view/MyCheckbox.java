@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder;
+package com.paperplay.myformbuilder.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.paperplay.myformbuilder.R;
 import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class MyCheckbox extends LinearLayout{
     Context context;
     View view;
     boolean nullable;
-    ArrayList<String> checkBoxItem = new ArrayList<>();
+    ArrayList<String> checkBoxItem;
     HashMap<String, CheckBox> checkBoxItemSelected = new HashMap<String, CheckBox>();
     TextView txtTitle;
     LinearLayout formLayout;
@@ -45,6 +46,7 @@ public class MyCheckbox extends LinearLayout{
         ArrayList<String> checkBoxItem = new ArrayList<>();
         int defStyleAttr = R.style.AppTheme;
         OnCheckedListener onCheckedListener;
+        int formViewResource = -1;
 
         public Builder() {
         }
@@ -113,12 +115,18 @@ public class MyCheckbox extends LinearLayout{
             return this;
         }
 
+
+        public Builder setFormViewResource(int resource){
+            this.formViewResource = resource;
+            return this;
+        }
+
         public MyCheckbox create(){
             return new MyCheckbox(this);
         }
 
         public Object clone() throws CloneNotSupportedException{
-            return (MyCheckbox.Builder)super.clone();
+            return super.clone();
         }
     }
 
@@ -130,15 +138,20 @@ public class MyCheckbox extends LinearLayout{
         this.title = builder.title;
         this.checkBoxItem = builder.checkBoxItem;
         this.view  = LayoutInflater.from(context).inflate(R.layout.form_base_layout, null);
-        LinearLayout baseLayout = (LinearLayout)view.findViewById(R.id.baseLayout);
+        LinearLayout baseLayout = view.findViewById(R.id.baseLayout);
         baseLayout.setOrientation(builder.orientation);
-        txtTitle = (TextView)view.findViewById(R.id.item_title);
+        txtTitle = view.findViewById(R.id.item_title);
         txtTitle.setText(builder.title);
         for (String title : checkBoxItem){
-            View itemView = LayoutInflater.from(context).inflate(R.layout.form_checkbox, null);
-            TextView textViewQuestion = (TextView)itemView.findViewById(R.id.item_checkbox_title);
+            View itemView = null;
+            if(builder.formViewResource != -1){
+                itemView = LayoutInflater.from(context).inflate(builder.formViewResource, null);
+            }else {
+                itemView = LayoutInflater.from(context).inflate(R.layout.form_checkbox, null);
+            }
+            TextView textViewQuestion = itemView.findViewById(R.id.item_checkbox_title);
             textViewQuestion.setText(title);
-            CheckBox checkBoxAnswer = (CheckBox)itemView.findViewById(R.id.item_checkbox_value);
+            CheckBox checkBoxAnswer = itemView.findViewById(R.id.item_checkbox_value);
             checkBoxItemSelected.put(title, checkBoxAnswer);
             checkBoxAnswer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

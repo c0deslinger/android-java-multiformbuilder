@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder;
+package com.paperplay.myformbuilder.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.paperplay.myformbuilder.R;
 import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.util.HashMap;
@@ -52,6 +53,7 @@ public class MyRadioButton extends LinearLayout{
         boolean nullable = true;
         String selected;
         LinearLayout formLayout;
+        int formViewResource = -1;
 
         public Builder() {
         }
@@ -130,6 +132,12 @@ public class MyRadioButton extends LinearLayout{
             return this;
         }
 
+
+        public Builder setFormViewResource(int resource){
+            this.formViewResource = resource;
+            return this;
+        }
+
         public MyRadioButton create(){
             return new MyRadioButton(this);
         }
@@ -146,7 +154,11 @@ public class MyRadioButton extends LinearLayout{
         this.activity = builder.activity;
         this.title = builder.title;
         this.optionListString = builder.optionList;
-        this.view  = LayoutInflater.from(builder.context).inflate(R.layout.form_radiobutton, null);
+        if(builder.formViewResource != -1){
+            this.view  = LayoutInflater.from(builder.context).inflate(builder.formViewResource, null);
+        }else {
+            this.view = LayoutInflater.from(builder.context).inflate(R.layout.form_radiobutton, null);
+        }
         txtTitle = (TextView)view.findViewById(R.id.item_textview_title);
         txtTitle.setText(title);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);

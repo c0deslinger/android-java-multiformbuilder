@@ -8,12 +8,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.paperplay.myformbuilder.MyCheckbox;
-import com.paperplay.myformbuilder.MyEdittext;
-import com.paperplay.myformbuilder.MyEdittextMultiple;
-import com.paperplay.myformbuilder.MyRadioButton;
-import com.paperplay.myformbuilder.MySpinner;
-import com.paperplay.myformbuilder.MyTextView;
+import com.paperplay.myformbuilder.view.MyCheckbox;
+import com.paperplay.myformbuilder.view.MyEdittext;
+import com.paperplay.myformbuilder.view.MyEdittextMultiple;
+import com.paperplay.myformbuilder.view.MyRadioButton;
+import com.paperplay.myformbuilder.view.MySpinner;
+import com.paperplay.myformbuilder.view.MyTextView;
+import com.paperplay.myformbuilder.model.SpinnerData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +29,8 @@ public class ExampleJavaActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final LinearLayout formLayout = (LinearLayout) findViewById(R.id.formLayout);
-        Button btnSubmit = (Button)findViewById(R.id.btnSubmit);
+        final LinearLayout formLayout = findViewById(R.id.formLayout);
+        Button btnSubmit = findViewById(R.id.btnSubmit);
 
         /** Make template and set default value **/
         MyEdittext.Builder edtBuilder = new MyEdittext.Builder(ExampleJavaActivity.this).setFormLayout(formLayout);
@@ -38,7 +39,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
         try {
             //create edittext with search
             MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
-            edtId.setOnClickSearchListener(keyword -> toast("Search: "+keyword));
+            edtId.setOnClickListener(keyword -> toast("Search: "+keyword));
 
             //create general edittext
             MyEdittext edtName = edtBuilder.clone().setTitle("Name").create();
@@ -65,12 +66,14 @@ public class ExampleJavaActivity extends AppCompatActivity{
             MyEdittextMultiple edtMultiple = new MyEdittextMultiple.Builder(ExampleJavaActivity.this, edtList)
                     .setFormLayout(formLayout).setMargin(50).create();
 
-            //create spinner view
-            ArrayList<String> cityList = new ArrayList<>();
-            cityList.add("Malang");
-            cityList.add("Surabaya");
+            //create spinner data & view
+            ArrayList<SpinnerData> cityList = new ArrayList<>();
+            cityList.add(new SpinnerData(1, "1", "Malang"));
+            cityList.add(new SpinnerData(2, "2", "Surabaya", true));
+            cityList.add(new SpinnerData(3, "3", "Jakarta"));
             MySpinner spinCity = new MySpinner.Builder(ExampleJavaActivity.this)
-                    .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create();
+                    .setTitle("City").setItem(cityList).setDefaultSelectedValue("Jakarta").setFormLayout(formLayout).create();
+//            spinCity.hideItemById(2);
 
             //create checkbox
             ArrayList<String> educationList = new ArrayList<>();
@@ -94,7 +97,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     + " Birthdate: " + edtBirthdate.getValue()
                     + " No: " + edtMultiple.getValue("No")
                     + " Zip: " + edtMultiple.getValue("Zip")
-                    + " City: " + spinCity.getValue()
+                    + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
                     + " Education: "+myCheckboxView.getAllChecked()));
 
         }catch (CloneNotSupportedException e){

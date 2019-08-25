@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.widget.Toast
-import com.paperplay.myformbuilder.*
+import com.paperplay.myformbuilder.model.SpinnerData
+import com.paperplay.myformbuilder.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -34,6 +35,7 @@ class ExampleKotlinActivity : AppCompatActivity(){
         var edtBirthdate = edtBuilder.clone().setInputType(InputType.TYPE_CLASS_DATETIME)
                 .setTitle("Birthdate").setDateformat("dd-MM-yyyy")
                 .setTitleColorResource(R.color.dark_grey)
+                .setFormViewResource(R.layout.custom_form_edittext)
                 .create()
 
         //create edittext with 3 lines
@@ -48,11 +50,11 @@ class ExampleKotlinActivity : AppCompatActivity(){
                 .setFormLayout(formLayout).setMargin(50).create()
 
         //create spinner view
-        val cityList = ArrayList<String>()
-        cityList.add("Malang")
-        cityList.add("Surabaya")
+        val cityList = ArrayList<SpinnerData>()
+        cityList.add(SpinnerData(1, "1", "Malang"))
+        cityList.add(SpinnerData(2, "2", "Surabaya"))
         var spinCity = MySpinner.Builder(this@ExampleKotlinActivity)
-                .setTitle("City").setItem(cityList).setDefaultSelected("Surabaya").setFormLayout(formLayout).create()
+                .setTitle("City").setItem(cityList).setFormLayout(formLayout).create()
 
         //create checkbox
         val educationList = ArrayList<String>()
@@ -76,7 +78,7 @@ class ExampleKotlinActivity : AppCompatActivity(){
                 + " Birthdate: " + edtBirthdate.getValue()
                 + " No: " + edtMultiple.getValue("No")
                 + " Zip: " + edtMultiple.getValue("Zip")
-                + " City: " + spinCity.getValue()
+                + " City: " + spinCity.getSelectedValue()+"/"+spinCity.getIndexSelected()
                 + " Education: "+myCheckboxView.getAllChecked())}
 
     }

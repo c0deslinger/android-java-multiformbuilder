@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder;
+package com.paperplay.myformbuilder.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,13 +18,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.paperplay.myformbuilder.R;
 import com.paperplay.myformbuilder.function.ViewChecker;
 import com.paperplay.myformbuilder.modules.GeneralBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
@@ -74,6 +74,7 @@ public class MyEdittext extends LinearLayout{
         int inputType = -1;
         int titleColorResource = -1;
         int defStyleAttr = R.style.AppTheme;
+        int formViewResource = -1;
 
         public Builder() {
         }
@@ -152,6 +153,11 @@ public class MyEdittext extends LinearLayout{
             return this;
         }
 
+        public Builder setFormViewResource(int resource){
+            this.formViewResource = resource;
+            return this;
+        }
+
         public Builder setBackgroundDrawable(Drawable backgroundDrawable){
             this.backgroundDrawable = backgroundDrawable;
             return this;
@@ -173,22 +179,24 @@ public class MyEdittext extends LinearLayout{
         this.activity = builder.activity;
         this.nullable = builder.nullable;
         this.title = builder.title;
-        this.view  = LayoutInflater.from(builder.context).inflate(R.layout.form_edittext, null);
+        // change form view resource
+        if(builder.formViewResource != -1){
+            this.view  = LayoutInflater.from(builder.context).inflate(builder.formViewResource, null);
+        }else {
+            this.view = LayoutInflater.from(builder.context).inflate(R.layout.form_edittext, null);
+        }
         if(builder.mode == Mode.SEARCH){
-            btnSearch = (ImageButton) this.view.findViewById(R.id.btnSearch);
+            btnSearch = this.view.findViewById(R.id.btnSearch);
             btnSearch.setVisibility(View.VISIBLE);
-            btnSearch.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(onClickSearchListener!=null)
-                        onClickSearchListener.onClickSearch(editTextContent.getText().toString());
-                }
+            btnSearch.setOnClickListener(view -> {
+                if(onClickSearchListener!=null)
+                    onClickSearchListener.onClickSearch(editTextContent.getText().toString());
             });
         }
-        LinearLayout layout = (LinearLayout) this.view.findViewById(R.id.mainLayout);
+        LinearLayout layout = this.view.findViewById(R.id.mainLayout);
         layout.setOrientation(builder.orientation);
-        txtTitle = (TextView)view.findViewById(R.id.item_edittext_title);
-        editTextContent = (EditText)view.findViewById(R.id.item_edittext_value);
+        txtTitle = view.findViewById(R.id.item_edittext_title);
+        editTextContent = view.findViewById(R.id.item_edittext_value);
         editTextContent.setMinLines(builder.minLines);
         editTextContent.setTag(builder.title);
         if(builder.inputType == InputType.TYPE_CLASS_DATETIME) {

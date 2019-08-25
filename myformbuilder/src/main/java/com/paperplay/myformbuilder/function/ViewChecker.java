@@ -3,8 +3,8 @@ package com.paperplay.myformbuilder.function;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.paperplay.myformbuilder.MyEdittext;
-import com.paperplay.myformbuilder.MyEdittextMultiple;
+import com.paperplay.myformbuilder.view.MyEdittext;
+import com.paperplay.myformbuilder.view.MyEdittextMultiple;
 
 /**
  * Created by Ahmed Yusuf on 24/11/18.

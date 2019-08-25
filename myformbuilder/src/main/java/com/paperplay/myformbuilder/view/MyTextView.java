@@ -1,4 +1,4 @@
-package com.paperplay.myformbuilder;
+package com.paperplay.myformbuilder.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.paperplay.myformbuilder.function.ViewChecker;
+import com.paperplay.myformbuilder.R;
 import com.paperplay.myformbuilder.modules.GeneralBuilder;
-
-import java.util.function.Consumer;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
@@ -41,6 +39,7 @@ public class MyTextView extends LinearLayout{
         int orientation = LinearLayout.VERTICAL;
         int titleColorResource = -1;
         int defStyleAttr = R.style.AppTheme;
+        int formViewResource = -1;
 
         public Builder() {
         }
@@ -101,6 +100,11 @@ public class MyTextView extends LinearLayout{
 
         public Builder setContent(String content){
             this.content = content;
+            return this;
+        }
+
+        public Builder setFormViewResource(int resource){
+            this.formViewResource = resource;
             return this;
         }
 
