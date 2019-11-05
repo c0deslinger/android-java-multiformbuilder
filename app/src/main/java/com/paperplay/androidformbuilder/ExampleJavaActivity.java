@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.paperplay.myformbuilder.model.AutocompleteData;
+import com.paperplay.myformbuilder.view.HorizontalLayout;
+import com.paperplay.myformbuilder.view.MyAutocomplete;
 import com.paperplay.myformbuilder.view.MyCheckbox;
 import com.paperplay.myformbuilder.view.MyEdittext;
 import com.paperplay.myformbuilder.view.MyEdittextMultiple;
@@ -73,7 +77,6 @@ public class ExampleJavaActivity extends AppCompatActivity{
             cityList.add(new SpinnerData(3, "3", "Jakarta"));
             MySpinner spinCity = new MySpinner.Builder(ExampleJavaActivity.this)
                     .setTitle("City").setItem(cityList).setDefaultSelectedValue("Jakarta").setFormLayout(formLayout).create();
-//            spinCity.hideItemById(2);
 
             //create checkbox
             ArrayList<String> educationList = new ArrayList<>();
@@ -84,6 +87,27 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setTitle("Education").setCheckBoxItem(educationList)
                     .setFormLayout(formLayout)
                     .setOnCheckedListener(selected -> toast("selected: "+selected)).create();
+
+            //create horizontal layout
+            MySpinner spinBaru = new MySpinner.Builder(ExampleJavaActivity.this)
+                    .setTitle("Baru Spin").setItem(cityList).setDefaultSelectedValue("Jakarta").create();
+            MyEdittext edtBaru = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("Baru Edit").create();
+            ArrayList<View> viewList = new ArrayList<>();
+            viewList.add(spinBaru.getView());
+            viewList.add(edtBaru.getView());
+            HorizontalLayout horizontalLayout = new HorizontalLayout.Builder(ExampleJavaActivity.this)
+                    .setHorizontalMargin(25)
+                    .setViewList(viewList)
+                    .setFormLayout(formLayout)
+                    .create();
+
+            //create spinner data & view
+            ArrayList<AutocompleteData> atcList = new ArrayList<>();
+            atcList.add(new AutocompleteData(1, "1", "Satu"));
+            atcList.add(new AutocompleteData(1, "1", "Satu Dua"));
+            atcList.add(new AutocompleteData(3, "3", "Tiga"));
+            MyAutocomplete myAutocomplete = new MyAutocomplete.Builder(ExampleJavaActivity.this)
+                    .setTitle("Select").setItem(atcList).setFormLayout(formLayout).create();
 
             //create textview
             MyTextView myTextView = new MyTextView.Builder(ExampleJavaActivity.this)
@@ -98,7 +122,8 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     + " No: " + edtMultiple.getValue("No")
                     + " Zip: " + edtMultiple.getValue("Zip")
                     + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
-                    + " Education: "+myCheckboxView.getAllChecked()));
+                    + " Education: "+myCheckboxView.getAllChecked()
+                    + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()));
 
         }catch (CloneNotSupportedException e){
             e.printStackTrace();

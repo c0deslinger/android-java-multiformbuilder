@@ -16,13 +16,11 @@ import java.util.ArrayList;
  * Created by Ahmed Yusuf on 22/08/19.
  */
 public class SpinnerAdapter extends ArrayAdapter<SpinnerData>{
-    ArrayList<SpinnerData> dataList;
-    Context context;
+    private ArrayList<SpinnerData> dataList;
 
 
     public SpinnerAdapter(@NonNull Context context, int resource, ArrayList<SpinnerData> dataList) {
         super(context, resource, dataList);
-        this.context = context;
         this.dataList = dataList;
     }
 
@@ -50,9 +48,5 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerData>{
         TextView txtItem = (TextView)super.getView(position, convertView,parent);
         txtItem.setText(dataList.get(position).getValue());
         return txtItem;
-    }
-
-    public void setDataList(ArrayList<SpinnerData> dataList) {
-        this.dataList = dataList;
     }
 }

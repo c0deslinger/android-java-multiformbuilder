@@ -3,36 +3,40 @@ package com.paperplay.myformbuilder.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.paperplay.myformbuilder.R;
-import com.paperplay.myformbuilder.adapter.SpinnerAdapter;
+import com.paperplay.myformbuilder.adapter.AutocompleteAdapter;
+import com.paperplay.myformbuilder.model.AutocompleteData;
 import com.paperplay.myformbuilder.modules.GeneralBuilder;
-import com.paperplay.myformbuilder.model.SpinnerData;
 
 import java.util.ArrayList;
 
 /**
  * Created by Ahmed Yusuf on 18/11/18.
  */
-public class MySpinner extends LinearLayout {
+public class MyAutocomplete extends LinearLayout {
     String title;
     Context context;
     LinearLayout formLayout;
-    LinearLayout mainLayout;
     TextView txtTitle;
-    Spinner spinnerAnswer;
+    AppCompatAutoCompleteTextView autoCompleteTextView;
     View view;
-    ArrayList<SpinnerData> item = new ArrayList<>(); //full item
-    ArrayList<SpinnerData> itemDropDown = new ArrayList<>();
+    ArrayList<AutocompleteData> item = new ArrayList<>(); //full item
+    ArrayList<AutocompleteData> itemDropDown = new ArrayList<>();
     boolean nullable = false;
     OnSelectedListener onSelectedListener;
-    SpinnerAdapter spinnerAdapter;
+    AutocompleteAdapter autocompleteAdapter;
+
+    AutocompleteData autocompleteDataSelected;
     
     public static class Builder implements GeneralBuilder<Builder>, Cloneable {
         //required
@@ -40,7 +44,7 @@ public class MySpinner extends LinearLayout {
         Context context;
 
         //optional
-        ArrayList<SpinnerData> item;
+        ArrayList<AutocompleteData> item;
         String title;
         String titleFont;
         int titleColorResource = -1;
@@ -121,7 +125,7 @@ public class MySpinner extends LinearLayout {
             return this;
         }
 
-        public Builder setItem(ArrayList<SpinnerData> item) {
+        public Builder setItem(ArrayList<AutocompleteData> item) {
             this.item = item;
             return this;
         }
@@ -136,8 +140,8 @@ public class MySpinner extends LinearLayout {
             return this;
         }
 
-        public MySpinner create(){
-            return new MySpinner(this);
+        public MyAutocomplete create(){
+            return new MyAutocomplete(this);
         }
 
         @Override
@@ -147,30 +151,32 @@ public class MySpinner extends LinearLayout {
 
     }
 
-    public MySpinner(Builder builder){
+    public MyAutocomplete(Builder builder){
         super(builder.context, null, builder.defStyleAttr);
         this.title = builder.title;
         this.context = builder.context;
         if(builder.formViewResource != -1){
             this.view  = LayoutInflater.from(context).inflate(builder.formViewResource, null);
         }else {
-            this.view = LayoutInflater.from(context).inflate(R.layout.form_dropdown, null);
+            this.view = LayoutInflater.from(context).inflate(R.layout.form_autocomplete, null);
         }
-        txtTitle = view.findViewById(R.id.item_spinner_title);
+        txtTitle = view.findViewById(R.id.item_atc_title);
         txtTitle.setText(title);
-        spinnerAnswer = view.findViewById(R.id.item_spinner_list);
+        autoCompleteTextView = view.findViewById(R.id.item_atc_list);
         this.item.addAll(builder.item); //set as backup data
-        for (SpinnerData items : builder.item){ //show all but hidden item
+        for (AutocompleteData items : builder.item){ //show all but hidden item
             if(!items.isHidden()) this.itemDropDown.add(items);
         }
-        spinnerAdapter = new SpinnerAdapter(context,
-                R.layout.row_spinner, this.itemDropDown);
-        spinnerAnswer.setAdapter(spinnerAdapter);
-        spinnerAnswer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        autocompleteAdapter = new AutocompleteAdapter(builder.activity,
+                R.layout.row_autocomplete, this.itemDropDown);
+//        autoCompleteTextView.setThreshold(1);
+        autoCompleteTextView.setAdapter(autocompleteAdapter);
+        autoCompleteTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(onSelectedListener !=null) {
                     onSelectedListener.onSelectedData(item.get(i));
+                    autocompleteDataSelected = item.get(i);
                 }
             }
 
@@ -189,17 +195,25 @@ public class MySpinner extends LinearLayout {
             this.formLayout = builder.formLayout;
             this.formLayout.addView(this.view);
         }
+        autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus)
+                autoCompleteTextView.showDropDown();
+        });
+        autoCompleteTextView.setOnTouchListener((v, event) -> {
+            autoCompleteTextView.showDropDown();
+            return false;
+        });
     }
 
     public interface OnSelectedListener {
-        void onSelectedData(SpinnerData spinnerData);
+        void onSelectedData(AutocompleteData autocompleteData);
     }
 
     public void setSpinnerOnSelectedListener(OnSelectedListener onSelectedListener) {
         this.onSelectedListener = onSelectedListener;
     }
 
-    public int indexOfItem(SpinnerData value){
+    public int indexOfItem(AutocompleteData value){
         return itemDropDown.indexOf(value);
     }
 
@@ -209,48 +223,47 @@ public class MySpinner extends LinearLayout {
 
     public void setValue(String value){
         if(value != null) {
-            SpinnerData spinnerData = null;
-            for (SpinnerData data : itemDropDown){
+            AutocompleteData autocompleteData = null;
+            for (AutocompleteData data : itemDropDown){
                 if(data.getValue().equals(value)) {
-                    spinnerData = data;
+                    autocompleteData = data;
                     break;
                 }
             }
-            spinnerAnswer.setSelection(indexOfItem(spinnerData));
+            autoCompleteTextView.setText(autocompleteData.getValue());
+            autocompleteDataSelected = autocompleteData;
         }
     }
 
     public void setId(int id){
         if(id != -1) {
-            SpinnerData spinnerData = null;
-            for (SpinnerData data : itemDropDown){
+            AutocompleteData autocompleteData = null;
+            for (AutocompleteData data : itemDropDown){
                 if(data.getId() == id) {
-                    spinnerData = data;
+                    autocompleteData = data;
                     break;
                 }
             }
-            spinnerAnswer.setSelection(indexOfItem(spinnerData));
+            autoCompleteTextView.setText(autocompleteData.getValue());
+            autocompleteDataSelected = autocompleteData;
         }
     }
 
     public String getSelectedValue(){
         if(this.view.getVisibility() == View.VISIBLE) {
-            SpinnerData spinnerDataSelected = (SpinnerData) spinnerAnswer.getSelectedItem();
-            return String.valueOf(spinnerDataSelected.getValue());
+            return autocompleteDataSelected.getValue();
         } else return null;
     }
 
     public int getSelectedId(){
         if(this.view.getVisibility() == View.VISIBLE) {
-            SpinnerData spinnerDataSelected = (SpinnerData) spinnerAnswer.getSelectedItem();
-            return spinnerDataSelected.getId();
+            return autocompleteDataSelected.getId();
         } else return 0;
     }
 
     public String getSelectedSecondaryId(){
         if(this.view.getVisibility() == View.VISIBLE) {
-            SpinnerData spinnerDataSelected = (SpinnerData) spinnerAnswer.getSelectedItem();
-            return spinnerDataSelected.getSecondaryId();
+            return autocompleteDataSelected.getSecondaryId();
         }else return "0";
     }
 
@@ -260,10 +273,6 @@ public class MySpinner extends LinearLayout {
 
     public void detachView(){
         formLayout.removeView(this.view);
-    }
-
-    public int getIndexSelected(){
-        return spinnerAnswer.getSelectedItemPosition();
     }
 
     public boolean isNullable() {
@@ -279,7 +288,7 @@ public class MySpinner extends LinearLayout {
     }
 
     public void hideItemById(int id){
-        for (SpinnerData items : item){
+        for (AutocompleteData items : item){
             if(items.getId() == id){
                 items.setHidden(true);
                 break;
@@ -290,7 +299,7 @@ public class MySpinner extends LinearLayout {
 
 
     public void hideItemByValue(String value){
-        for (SpinnerData items : item){
+        for (AutocompleteData items : item){
             if(items.getValue().equals(value)){
                 items.setHidden(true);
                 break;
@@ -300,7 +309,7 @@ public class MySpinner extends LinearLayout {
     }
 
     public void showItemById(int id){
-        for (SpinnerData items : item){
+        for (AutocompleteData items : item){
             if(items.getId() == id){
                 items.setHidden(false);
                 break;
@@ -311,7 +320,7 @@ public class MySpinner extends LinearLayout {
 
 
     public void showItemByValue(String value){
-        for (SpinnerData items : item){
+        for (AutocompleteData items : item){
             if(items.getValue().equals(value)){
                 items.setHidden(false);
                 break;
@@ -322,9 +331,9 @@ public class MySpinner extends LinearLayout {
 
     private void reloadListDropdown(){
         itemDropDown.clear();
-        for (SpinnerData items : item){
+        for (AutocompleteData items : item){
             if(!items.isHidden()) itemDropDown.add(items);
         }
-        spinnerAdapter.notifyDataSetChanged();
+        autocompleteAdapter.notifyDataSetChanged();
     }
 }

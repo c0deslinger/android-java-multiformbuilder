@@ -30,6 +30,7 @@
     <!-- list of color -->
     <color name="sub_white">#f6f6f8</color>
     <color name="darkGrey">#4c565f</color>
+    <color name="semiBlack">#272727</color>
     <color name="grey">#b2b2b2</color>
     <color name="subwhite">#ececec</color>
     <color name="lightGreen">#59d58d</color>
