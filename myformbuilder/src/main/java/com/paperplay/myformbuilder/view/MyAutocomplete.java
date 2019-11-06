@@ -250,13 +250,13 @@ public class MyAutocomplete extends LinearLayout {
     }
 
     public String getSelectedValue(){
-        if(this.view.getVisibility() == View.VISIBLE) {
+        if(this.view.getVisibility() == View.VISIBLE && autocompleteDataSelected!= null) {
             return autocompleteDataSelected.getValue();
         } else return null;
     }
 
     public int getSelectedId(){
-        if(this.view.getVisibility() == View.VISIBLE) {
+        if(this.view.getVisibility() == View.VISIBLE && autocompleteDataSelected != null) {
             return autocompleteDataSelected.getId();
         } else return 0;
     }

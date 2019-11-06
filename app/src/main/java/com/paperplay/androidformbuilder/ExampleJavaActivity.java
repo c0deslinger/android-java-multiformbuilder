@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.paperplay.myformbuilder.model.AutocompleteData;
 import com.paperplay.myformbuilder.view.HorizontalLayout;
 import com.paperplay.myformbuilder.view.MyAutocomplete;
+import com.paperplay.myformbuilder.view.MyButton;
 import com.paperplay.myformbuilder.view.MyCheckbox;
 import com.paperplay.myformbuilder.view.MyEdittext;
 import com.paperplay.myformbuilder.view.MyEdittextMultiple;
@@ -59,6 +60,12 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setTitleColorResource(R.color.dark_grey)
                     .create();
 
+            //create edittext + timepicker
+            MyEdittext edtTimePicker = edtBuilder.clone().setInputType(InputType.TYPE_DATETIME_VARIATION_TIME)
+                    .setTitle("Time")
+                    .setTitleColorResource(R.color.dark_grey)
+                    .create();
+
             //create edittext with 3 lines
             MyEdittext edtAddress = edtBuilder.clone().setTitle("Address").setMinLines(3).create();
 
@@ -88,7 +95,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setFormLayout(formLayout)
                     .setOnCheckedListener(selected -> toast("selected: "+selected)).create();
 
-            //create horizontal layout
+            //create horizontal layout with builder
             MySpinner spinBaru = new MySpinner.Builder(ExampleJavaActivity.this)
                     .setTitle("Baru Spin").setItem(cityList).setDefaultSelectedValue("Jakarta").create();
             MyEdittext edtBaru = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("Baru Edit").create();
@@ -100,6 +107,14 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setViewList(viewList)
                     .setFormLayout(formLayout)
                     .create();
+
+            //create horizontal layout with object
+            MyEdittext edtRT = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("RT").create();
+            MyEdittext edtRW = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("RW").create();
+            HorizontalLayout horizontalLayout1 = new HorizontalLayout(getBaseContext(), 0, 25);
+            horizontalLayout1.addView(edtRT.getView());
+            horizontalLayout1.addView(edtRW.getView());
+            formLayout.addView(horizontalLayout1.getView());
 
             //create spinner data & view
             ArrayList<AutocompleteData> atcList = new ArrayList<>();
@@ -115,15 +130,27 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setContent("Please check again before submit")
                     .setFormLayout(formLayout).create();
 
-            btnSubmit.setOnClickListener(view -> toast("Name: " + edtName.getValue()
-                    + " Gender: " + rdbGender.getValue()
-                    + " Address: " + edtAddress.getValue()
-                    + " Birthdate: " + edtBirthdate.getValue()
-                    + " No: " + edtMultiple.getValue("No")
-                    + " Zip: " + edtMultiple.getValue("Zip")
-                    + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
-                    + " Education: "+myCheckboxView.getAllChecked()
-                    + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()));
+            MyButton button = new MyButton.Builder(ExampleJavaActivity.this).setFormLayout(formLayout)
+                    .setOnClickListener(view -> toast("Name: " + edtName.getValue()
+                            + " Gender: " + rdbGender.getValue()
+                            + " Address: " + edtAddress.getValue()
+                            + " Birthdate: " + edtBirthdate.getValue()
+                            + " No: " + edtMultiple.getValue("No")
+                            + " Zip: " + edtMultiple.getValue("Zip")
+                            + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
+                            + " Education: "+myCheckboxView.getAllChecked()
+                            + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()))
+                    .setText("Sumbit").create();
+
+//            button.getView().setOnClickListener(view -> toast("Name: " + edtName.getValue()
+//                    + " Gender: " + rdbGender.getValue()
+//                    + " Address: " + edtAddress.getValue()
+//                    + " Birthdate: " + edtBirthdate.getValue()
+//                    + " No: " + edtMultiple.getValue("No")
+//                    + " Zip: " + edtMultiple.getValue("Zip")
+//                    + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
+//                    + " Education: "+myCheckboxView.getAllChecked()
+//                    + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()));
 
         }catch (CloneNotSupportedException e){
             e.printStackTrace();

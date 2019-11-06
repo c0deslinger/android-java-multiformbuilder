@@ -153,12 +153,9 @@ public class MyCheckbox extends LinearLayout{
             textViewQuestion.setText(title);
             CheckBox checkBoxAnswer = itemView.findViewById(R.id.item_checkbox_value);
             checkBoxItemSelected.put(title, checkBoxAnswer);
-            checkBoxAnswer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
-                    if(selected)
-                        builder.onCheckedListener.onchecked(title);
-                }
+            checkBoxAnswer.setOnCheckedChangeListener((compoundButton, selected) -> {
+                if(selected)
+                    builder.onCheckedListener.onchecked(title);
             });
             baseLayout.addView(itemView);
         }

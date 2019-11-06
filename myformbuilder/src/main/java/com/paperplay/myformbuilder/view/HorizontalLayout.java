@@ -11,6 +11,10 @@ import java.util.ArrayList;
  */
 public class HorizontalLayout {
 
+    private LinearLayout horizontalLayout;
+    private ArrayList<View> viewList = new ArrayList<>();
+    private int horizontal_margin = 0, vertical_margin = 0;
+
     public static class Builder implements LayoutBuilder<Builder>, Cloneable{
         int horizontal_margin = 0, vertical_margin = 0;
         ArrayList<View> viewList;
@@ -54,6 +58,10 @@ public class HorizontalLayout {
         }
     }
 
+    /**
+     * Used for mode builder
+     * @param builder
+     */
     private HorizontalLayout(Builder builder){
         LinearLayout horizontalLayout = new LinearLayout(builder.context);
         horizontalLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -78,5 +86,52 @@ public class HorizontalLayout {
             LinearLayout formLayout = builder.formLayout;
             formLayout.addView(horizontalLayout);
         }
+    }
+
+    /**
+     * Used for mode general
+     * @param context
+     */
+    public HorizontalLayout(Context context, int verticalMargin, int horizontalMargin){
+        horizontalLayout = new LinearLayout(context);
+        horizontalLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+        this.vertical_margin = verticalMargin;
+        this.horizontal_margin = horizontalMargin;
+    }
+
+    public void addView(View view){
+        viewList.add(view);
+        if(viewList.size() > 1){
+            horizontalLayout.removeAllViews();
+            for (int n=0;n< viewList.size(); n++){
+                View viewItem = viewList.get(n);
+                if(n == 0){
+                    //set margin of first item
+                    LinearLayout.LayoutParams layoutParamsFirstItem = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            1.0f);
+                    layoutParamsFirstItem.setMargins(0, vertical_margin, horizontal_margin, vertical_margin);
+                    viewItem.setLayoutParams(layoutParamsFirstItem);
+                }else{
+                    //set margin on new item
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            1.0f);
+                    layoutParams.setMargins(horizontal_margin, vertical_margin, 0, vertical_margin);
+                    viewItem.setLayoutParams(layoutParams);
+                }
+                horizontalLayout.addView(viewItem);
+            }
+        }else{
+            horizontalLayout.addView(view);
+        }
+    }
+
+    public View getView(){
+        return horizontalLayout;
     }
 }

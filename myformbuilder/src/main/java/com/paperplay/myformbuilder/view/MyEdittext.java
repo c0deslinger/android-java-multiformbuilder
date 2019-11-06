@@ -3,6 +3,7 @@ package com.paperplay.myformbuilder.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.paperplay.myformbuilder.R;
 import com.paperplay.myformbuilder.function.ViewChecker;
@@ -46,6 +48,7 @@ public class MyEdittext extends LinearLayout{
     String title;
     String dateformat = "yyyy-MM-dd";
     DatePickerDialog datePickerDialog;
+    TimePickerDialog timePickerDialog;
 
     //search mode
     OnClickSearchListener onClickSearchListener;
@@ -208,12 +211,18 @@ public class MyEdittext extends LinearLayout{
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH));
             editTextContent.setFocusableInTouchMode(false);
-            editTextContent.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    datePickerDialog.show();
-                }
-            });
+            editTextContent.setOnClickListener(view -> datePickerDialog.show());
+            editTextContent.setKeyListener(null);
+            editTextContent.setInputType(InputType.TYPE_NULL);
+        }else if(builder.inputType == InputType.TYPE_DATETIME_VARIATION_TIME) {
+            if(dateformat!=null){
+                this.dateformat = builder.dateformat;
+            }
+            Calendar mCurrentTime = Calendar.getInstance();
+            int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = mCurrentTime.get(Calendar.MINUTE);
+            timePickerDialog = new TimePickerDialog(activity, timeSetListener, hour, minute, true);
+            editTextContent.setOnClickListener(view -> timePickerDialog.show());
             editTextContent.setKeyListener(null);
             editTextContent.setInputType(InputType.TYPE_NULL);
         }else{
@@ -263,6 +272,13 @@ public class MyEdittext extends LinearLayout{
 
             if(myDateSetListener!=null)
                 myDateSetListener.onDateSet(sdf.format(myCalendar.getTime()));
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            editTextContent.setText(hourOfDay+":"+minute);
         }
     };
 
