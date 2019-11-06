@@ -96,25 +96,19 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setOnCheckedListener(selected -> toast("selected: "+selected)).create();
 
             //create horizontal layout with builder
-            MySpinner spinBaru = new MySpinner.Builder(ExampleJavaActivity.this)
-                    .setTitle("Baru Spin").setItem(cityList).setDefaultSelectedValue("Jakarta").create();
-            MyEdittext edtBaru = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("Baru Edit").create();
-            ArrayList<View> viewList = new ArrayList<>();
-            viewList.add(spinBaru.getView());
-            viewList.add(edtBaru.getView());
-            HorizontalLayout horizontalLayout = new HorizontalLayout.Builder(ExampleJavaActivity.this)
-                    .setHorizontalMargin(25)
-                    .setViewList(viewList)
-                    .setFormLayout(formLayout)
-                    .create();
+            HorizontalLayout horizontalLayout = new HorizontalLayout(getBaseContext(), 0, 20);
+
 
             //create horizontal layout with object
             MyEdittext edtRT = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("RT").create();
             MyEdittext edtRW = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("RW").create();
-            HorizontalLayout horizontalLayout1 = new HorizontalLayout(getBaseContext(), 0, 25);
-            horizontalLayout1.addView(edtRT.getView());
-            horizontalLayout1.addView(edtRW.getView());
-            formLayout.addView(horizontalLayout1.getView());
+            MyButton buttonCheck = new MyButton.Builder(ExampleJavaActivity.this).setText("Check").create();
+            MyEdittext edtRS = new MyEdittext.Builder(ExampleJavaActivity.this).setTitle("RS").create();
+            horizontalLayout.addView(edtRT.getView(), false);
+            horizontalLayout.addView(edtRW.getView(), false);
+            horizontalLayout.addView(buttonCheck.getView(), true);
+            horizontalLayout.addView(edtRS.getView(), true);
+            formLayout.addView(horizontalLayout.getView());
 
             //create spinner data & view
             ArrayList<AutocompleteData> atcList = new ArrayList<>();
@@ -141,6 +135,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
                             + " Education: "+myCheckboxView.getAllChecked()
                             + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()))
                     .setText("Sumbit").create();
+            button.getView();
 
 //            button.getView().setOnClickListener(view -> toast("Name: " + edtName.getValue()
 //                    + " Gender: " + rdbGender.getValue()
