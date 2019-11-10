@@ -137,16 +137,6 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setText("Sumbit").create();
             button.getView();
 
-//            button.getView().setOnClickListener(view -> toast("Name: " + edtName.getValue()
-//                    + " Gender: " + rdbGender.getValue()
-//                    + " Address: " + edtAddress.getValue()
-//                    + " Birthdate: " + edtBirthdate.getValue()
-//                    + " No: " + edtMultiple.getValue("No")
-//                    + " Zip: " + edtMultiple.getValue("Zip")
-//                    + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
-//                    + " Education: "+myCheckboxView.getAllChecked()
-//                    + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()));
-
         }catch (CloneNotSupportedException e){
             e.printStackTrace();
         }

@@ -81,7 +81,7 @@ public class AutocompleteAdapter extends ArrayAdapter<AutocompleteData>{
 
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            if(charSequence != null) {
+            if(charSequence != null && !charSequence.toString().isEmpty()) {
                 suggestions.clear();
                 for (AutocompleteData autocompleteData : tempDataList) {
                     if(autocompleteData.getValue().contains(" ")){
@@ -100,7 +100,12 @@ public class AutocompleteAdapter extends ArrayAdapter<AutocompleteData>{
                 filterResults.count = suggestions.size();
                 return filterResults;
             }else{
-                return new FilterResults();
+                suggestions.clear();
+                suggestions.addAll(tempDataList);
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = suggestions;
+                filterResults.count = suggestions.size();
+                return filterResults;
             }
         }
 
@@ -108,7 +113,7 @@ public class AutocompleteAdapter extends ArrayAdapter<AutocompleteData>{
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults results) {
             ArrayList<AutocompleteData> tempValues = (ArrayList<AutocompleteData>)results.values;
-            if(results != null && results.count > 0){
+            if(results.count > 0){
                 clear();
                 for (AutocompleteData autocompleteData : tempValues){
                     add(autocompleteData);
