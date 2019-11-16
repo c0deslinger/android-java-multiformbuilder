@@ -3,6 +3,7 @@ package com.paperplay.myformbuilder.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -278,6 +279,9 @@ public class MySpinner extends LinearLayout {
         return txtTitle;
     }
 
+    /**
+     * hide dropdown list by id
+     */
     public void hideItemById(int id){
         for (SpinnerData items : item){
             if(items.getId() == id){
@@ -289,6 +293,9 @@ public class MySpinner extends LinearLayout {
     }
 
 
+    /**
+     * hide dropdown list by value
+     */
     public void hideItemByValue(String value){
         for (SpinnerData items : item){
             if(items.getValue().equals(value)){
@@ -299,6 +306,9 @@ public class MySpinner extends LinearLayout {
         reloadListDropdown();
     }
 
+    /**
+     * Select dropdown list by id
+     */
     public void showItemById(int id){
         for (SpinnerData items : item){
             if(items.getId() == id){
@@ -310,6 +320,10 @@ public class MySpinner extends LinearLayout {
     }
 
 
+    /**
+     * Select dropdown list by value
+     * @param value
+     */
     public void showItemByValue(String value){
         for (SpinnerData items : item){
             if(items.getValue().equals(value)){
@@ -326,5 +340,21 @@ public class MySpinner extends LinearLayout {
             if(!items.isHidden()) itemDropDown.add(items);
         }
         spinnerAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Update list dropdown with new list
+     * @param data
+     */
+    public void updateListDropdown(ArrayList<SpinnerData> data) {
+        if (data != null && spinnerAdapter != null) {
+            this.item.clear();
+            this.itemDropDown.clear();
+            this.item.addAll(data); //set as backup data
+            for (SpinnerData items : data) { //show all but hidden item
+                if (!items.isHidden()) this.itemDropDown.add(items);
+            }
+            spinnerAdapter.notifyDataSetChanged();
+        }
     }
 }

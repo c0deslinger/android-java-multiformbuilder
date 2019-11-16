@@ -352,4 +352,20 @@ public class MyAutocomplete extends LinearLayout {
         }
         autocompleteAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * Update list dropdown with new list
+     * @param data
+     */
+    public void updateListDropdown(ArrayList<AutocompleteData> data){
+        if(data!=null && autocompleteAdapter!=null) {
+            this.item.clear();
+            this.itemDropDown.clear();
+            this.item.addAll(data);
+            for (AutocompleteData items : data) { //show all but hidden item
+                if (!items.isHidden()) this.itemDropDown.add(items);
+            }
+            autocompleteAdapter.notifyDataSetChanged();
+        }
+    }
 }
