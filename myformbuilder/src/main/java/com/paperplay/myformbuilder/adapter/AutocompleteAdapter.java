@@ -32,6 +32,12 @@ public class AutocompleteAdapter extends ArrayAdapter<AutocompleteData>{
         suggestions = new ArrayList<>();
     }
 
+    public void updateListDropdown(ArrayList<AutocompleteData> dataList){
+        this.dataList = dataList;
+        tempDataList.clear();
+        tempDataList.addAll(dataList);
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

@@ -133,9 +133,10 @@ public class ExampleJavaActivity extends AppCompatActivity{
                             + " Zip: " + edtMultiple.getValue("Zip")
                             + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
                             + " Education: "+myCheckboxView.getAllChecked()
-                            + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedId()))
+                            + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedData().toString()))
                     .setText("Sumbit").create();
             button.getView();
+
 
         }catch (CloneNotSupportedException e){
             e.printStackTrace();

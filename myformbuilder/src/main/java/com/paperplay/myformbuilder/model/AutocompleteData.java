@@ -54,4 +54,14 @@ public class AutocompleteData {
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
+
+    @Override
+    public String toString() {
+        return "AutocompleteData{" +
+                "id=" + id +
+                ", secondaryId='" + secondaryId + '\'' +
+                ", value='" + value + '\'' +
+                ", hidden=" + hidden +
+                '}';
+    }
 }

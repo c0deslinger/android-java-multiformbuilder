@@ -3,6 +3,7 @@ package com.paperplay.myformbuilder.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -38,6 +39,9 @@ public class MyAutocomplete extends LinearLayout {
     AutocompleteAdapter autocompleteAdapter;
 
     AutocompleteData autocompleteDataSelected;
+    Activity activity;
+    String defaultSelectedValue = null;
+    int defaultSelectedId = -1;
     
     public static class Builder implements GeneralBuilder<Builder>, Cloneable {
         //required
@@ -156,6 +160,7 @@ public class MyAutocomplete extends LinearLayout {
         super(builder.context, null, builder.defStyleAttr);
         this.title = builder.title;
         this.context = builder.context;
+        this.activity = builder.activity;
         if(builder.formViewResource != -1){
             this.view  = LayoutInflater.from(context).inflate(builder.formViewResource, null);
         }else {
@@ -170,29 +175,37 @@ public class MyAutocomplete extends LinearLayout {
         for (AutocompleteData items : builder.item){ //show all but hidden item
             if(!items.isHidden()) this.itemDropDown.add(items);
         }
-        autocompleteAdapter = new AutocompleteAdapter(builder.activity,
-                R.layout.row_autocomplete, this.itemDropDown);
-        autoCompleteTextView.setThreshold(1);
-        autoCompleteTextView.setAdapter(autocompleteAdapter);
-        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> autocompleteDataSelected = item.get(position));
-        if(builder.defaultSelectedValue != null){
-            setValue(builder.defaultSelectedValue);
-        }
-        if(builder.defaultSelectedId != -1){
-            setId(builder.defaultSelectedId);
-        }
+
         if(builder.formLayout!=null){
             this.formLayout = builder.formLayout;
             this.formLayout.addView(this.view);
         }
-        autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus)
-                autoCompleteTextView.showDropDown();
-        });
-        autoCompleteTextView.setOnTouchListener((v, event) -> {
-            autoCompleteTextView.showDropDown();
-            return false;
-        });
+
+        this.defaultSelectedValue = builder.defaultSelectedValue;
+        this.defaultSelectedId = builder.defaultSelectedId;
+
+        setAdapter();
+
+
+//        autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
+//            if(hasFocus)
+//                autoCompleteTextView.showDropDown();
+//        });
+
+    }
+
+    private void setAdapter(){
+        autocompleteAdapter = new AutocompleteAdapter(this.activity,
+                R.layout.row_autocomplete, this.itemDropDown);
+        autoCompleteTextView.setAdapter(autocompleteAdapter);
+        autoCompleteTextView.setThreshold(1);
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> autocompleteDataSelected = item.get(position));
+        if(defaultSelectedValue != null){
+            setValue(defaultSelectedValue);
+        }
+        if(defaultSelectedId != -1){
+            setId(defaultSelectedId);
+        }
         autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
             if(!hasFocus){
                 boolean found = false;
@@ -214,6 +227,10 @@ public class MyAutocomplete extends LinearLayout {
                     autoCompleteTextView.setText("");
                 }
             }
+        });
+        autoCompleteTextView.setOnTouchListener((v, event) -> {
+            autoCompleteTextView.showDropDown();
+            return false;
         });
     }
 
@@ -259,6 +276,12 @@ public class MyAutocomplete extends LinearLayout {
             autoCompleteTextView.setText(autocompleteData.getValue());
             autocompleteDataSelected = autocompleteData;
         }
+    }
+
+    public AutocompleteData getSelectedData(){
+        if(this.view.getVisibility() == View.VISIBLE && autocompleteDataSelected!= null) {
+            return autocompleteDataSelected;
+        } else return null;
     }
 
     public String getSelectedValue(){
@@ -365,7 +388,9 @@ public class MyAutocomplete extends LinearLayout {
             for (AutocompleteData items : data) { //show all but hidden item
                 if (!items.isHidden()) this.itemDropDown.add(items);
             }
-            autocompleteAdapter.notifyDataSetChanged();
+//            autocompleteAdapter.updateListDropdown(data);
+//            autocompleteAdapter.notifyDataSetChanged();
+            setAdapter();
         }
     }
 }
