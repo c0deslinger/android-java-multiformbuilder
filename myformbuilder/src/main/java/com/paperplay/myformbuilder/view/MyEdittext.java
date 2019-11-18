@@ -197,8 +197,6 @@ public class MyEdittext extends LinearLayout{
                     onClickSearchListener.onClickSearch(editTextContent.getText().toString());
             });
         }
-//        mainLayout = this.view.findViewById(R.id.mainLayoutEdittext);
-//        mainLayout.setOrientation(builder.orientation);
         txtTitle = view.findViewById(R.id.item_edittext_title);
         editTextContent = view.findViewById(R.id.item_edittext_value);
         editTextContent.setMinLines(builder.minLines);

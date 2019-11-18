@@ -210,14 +210,14 @@ public class MySpinner extends LinearLayout {
 
     public void setValue(String value){
         if(value != null) {
-            SpinnerData spinnerData = null;
+            SpinnerData spinnerData;
             for (SpinnerData data : itemDropDown){
                 if(data.getValue().equals(value)) {
                     spinnerData = data;
+                    spinnerAnswer.setSelection(indexOfItem(spinnerData));
                     break;
                 }
             }
-            spinnerAnswer.setSelection(indexOfItem(spinnerData));
         }
     }
 
