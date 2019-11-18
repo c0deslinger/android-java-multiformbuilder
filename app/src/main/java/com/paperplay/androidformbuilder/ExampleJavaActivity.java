@@ -117,6 +117,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
             atcList.add(new AutocompleteData(3, "3", "Tiga"));
             MyAutocomplete myAutocomplete = new MyAutocomplete.Builder(ExampleJavaActivity.this)
                     .setTitle("Select").setItem(atcList).setFormLayout(formLayout).create();
+            myAutocomplete.setValue("Tiga");
 
             //create textview
             MyTextView myTextView = new MyTextView.Builder(ExampleJavaActivity.this)

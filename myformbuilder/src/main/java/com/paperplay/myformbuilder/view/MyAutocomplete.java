@@ -256,11 +256,11 @@ public class MyAutocomplete extends LinearLayout {
             for (AutocompleteData data : itemDropDown){
                 if(data.getValue().equals(value)) {
                     autocompleteData = data;
+                    autoCompleteTextView.setText(value);
+                    autocompleteDataSelected = autocompleteData;
                     break;
                 }
             }
-            autoCompleteTextView.setText(autocompleteData.getValue());
-            autocompleteDataSelected = autocompleteData;
         }
     }
 
@@ -388,8 +388,6 @@ public class MyAutocomplete extends LinearLayout {
             for (AutocompleteData items : data) { //show all but hidden item
                 if (!items.isHidden()) this.itemDropDown.add(items);
             }
-//            autocompleteAdapter.updateListDropdown(data);
-//            autocompleteAdapter.notifyDataSetChanged();
             setAdapter();
         }
     }
