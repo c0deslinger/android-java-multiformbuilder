@@ -138,6 +138,11 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setText("Sumbit").create();
             button.getView();
 
+            ArrayList<SpinnerData> cityList2 = new ArrayList<>();
+            cityList2.add(new SpinnerData(1, "1", "Zimbabwe"));
+            cityList2.add(new SpinnerData(2, "2", "Malang", true));
+            cityList2.add(new SpinnerData(3, "3", "Surabaya"));
+            spinCity.updateListDropdown(cityList2);
 
         }catch (CloneNotSupportedException e){
             e.printStackTrace();

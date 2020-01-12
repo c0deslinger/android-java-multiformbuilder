@@ -49,4 +49,9 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerData>{
         txtItem.setText(dataList.get(position).getValue());
         return txtItem;
     }
+
+    public void updateListDropdown(ArrayList<SpinnerData> dataList){
+        this.dataList = dataList;
+        notifyDataSetChanged();
+    }
 }

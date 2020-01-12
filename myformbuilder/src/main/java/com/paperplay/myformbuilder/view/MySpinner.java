@@ -172,6 +172,7 @@ public class MySpinner extends LinearLayout {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(onSelectedListener !=null) {
                     onSelectedListener.onSelectedData(item.get(i));
+                    onSelectedListener.onSelectedPosition(i);
                 }
             }
 
@@ -194,6 +195,7 @@ public class MySpinner extends LinearLayout {
 
     public interface OnSelectedListener {
         void onSelectedData(SpinnerData spinnerData);
+        void onSelectedPosition(int position);
     }
 
     public void setSpinnerOnSelectedListener(OnSelectedListener onSelectedListener) {
@@ -219,6 +221,10 @@ public class MySpinner extends LinearLayout {
                 }
             }
         }
+    }
+
+    public void setPosition(int position){
+        spinnerAnswer.setSelection(position);
     }
 
     public void setId(int id){
@@ -354,7 +360,8 @@ public class MySpinner extends LinearLayout {
             for (SpinnerData items : data) { //show all but hidden item
                 if (!items.isHidden()) this.itemDropDown.add(items);
             }
-            spinnerAdapter.notifyDataSetChanged();
+            spinnerAdapter.updateListDropdown(this.itemDropDown);
+            spinnerAnswer.setSelection(0);
         }
     }
 }
