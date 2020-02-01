@@ -35,13 +35,22 @@ public class ExampleJavaActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final LinearLayout formLayout = findViewById(R.id.formLayout);
-        Button btnSubmit = findViewById(R.id.btnSubmit);
 
         /** Make template and set default value **/
         MyEdittext.Builder edtBuilder = new MyEdittext.Builder(ExampleJavaActivity.this).setFormLayout(formLayout);
 
         /** Attach View **/
         try {
+
+            //create spinner data & view
+            ArrayList<AutocompleteData> atcList = new ArrayList<>();
+            atcList.add(new AutocompleteData(1, "1", "Satu"));
+            atcList.add(new AutocompleteData(2, "1", "Satu Dua"));
+            atcList.add(new AutocompleteData(3, "3", "Tiga"));
+            MyAutocomplete myAutocomplete = new MyAutocomplete.Builder(ExampleJavaActivity.this)
+                    .setTitle("Select").setItem(atcList).setFormLayout(formLayout).create();
+            myAutocomplete.setValue("Tiga");
+
             //create edittext with search
             MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
             edtId.setOnClickListener(keyword -> toast("Search: "+keyword));
@@ -110,14 +119,6 @@ public class ExampleJavaActivity extends AppCompatActivity{
             horizontalLayout.addView(edtRS.getView(), true);
             formLayout.addView(horizontalLayout.getView());
 
-            //create spinner data & view
-            ArrayList<AutocompleteData> atcList = new ArrayList<>();
-            atcList.add(new AutocompleteData(1, "1", "Satu"));
-            atcList.add(new AutocompleteData(1, "1", "Satu Dua"));
-            atcList.add(new AutocompleteData(3, "3", "Tiga"));
-            MyAutocomplete myAutocomplete = new MyAutocomplete.Builder(ExampleJavaActivity.this)
-                    .setTitle("Select").setItem(atcList).setFormLayout(formLayout).create();
-            myAutocomplete.setValue("Tiga");
 
             //create textview
             MyTextView myTextView = new MyTextView.Builder(ExampleJavaActivity.this)

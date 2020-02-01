@@ -3,16 +3,10 @@ package com.paperplay.myformbuilder.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.paperplay.myformbuilder.R;
@@ -42,6 +36,7 @@ public class MyAutocomplete extends LinearLayout {
     Activity activity;
     String defaultSelectedValue = null;
     int defaultSelectedId = -1;
+    boolean validValue = false;
     
     public static class Builder implements GeneralBuilder<Builder>, Cloneable {
         //required
@@ -186,12 +181,6 @@ public class MyAutocomplete extends LinearLayout {
 
         setAdapter();
 
-
-//        autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
-//            if(hasFocus)
-//                autoCompleteTextView.showDropDown();
-//        });
-
     }
 
     private void setAdapter(){
@@ -208,21 +197,21 @@ public class MyAutocomplete extends LinearLayout {
         }
         autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
             if(!hasFocus){
-                boolean found = false;
+                validValue = false;
                 if(autocompleteDataSelected == null) {
                     autoCompleteTextView.setText("");
                     return;
                 }
                 if(!autoCompleteTextView.getText().toString().isEmpty()) {
-                    for (AutocompleteData item : itemDropDown) {
+                    for (AutocompleteData item : item) {
                         if (item.getValue().equals(autoCompleteTextView.getText().toString())) {
                             autocompleteDataSelected = item;
-                            found = true;
+                            validValue = true;
                             break;
                         }
                     }
                 }
-                if(!found) {
+                if(!validValue) {
                     autocompleteDataSelected = null;
                     autoCompleteTextView.setText("");
                 }
@@ -258,6 +247,7 @@ public class MyAutocomplete extends LinearLayout {
                     autocompleteData = data;
                     autoCompleteTextView.setText(value);
                     autocompleteDataSelected = autocompleteData;
+                    validValue = true;
                     break;
                 }
             }
@@ -270,6 +260,7 @@ public class MyAutocomplete extends LinearLayout {
             for (AutocompleteData data : itemDropDown){
                 if(data.getId() == id) {
                     autocompleteData = data;
+                    validValue = false;
                     break;
                 }
             }
