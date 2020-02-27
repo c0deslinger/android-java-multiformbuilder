@@ -23,6 +23,7 @@ public class AutocompleteAdapter extends ArrayAdapter<AutocompleteData>{
     private Activity activity;
     private int resourceId;
 
+
     public AutocompleteAdapter(@NonNull Activity activity, int resource, ArrayList<AutocompleteData> dataList) {
         super(activity.getBaseContext(), resource, dataList);
         this.activity = activity;

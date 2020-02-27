@@ -4,10 +4,10 @@ package com.paperplay.myformbuilder.model;
  * Created by Ahmed Yusuf on 22/08/19.
  */
 public class AutocompleteData {
-    int id;
-    String secondaryId;
-    String value;
-    boolean hidden;
+    private int id;
+    private String secondaryId;
+    private String value;
+    private boolean hidden;
 
     public AutocompleteData(int id, String secondaryId, String value) {
         this.id = id;
@@ -22,6 +22,7 @@ public class AutocompleteData {
         this.value = value;
         this.hidden = hidden;
     }
+
 
     public int getId() {
         return id;
