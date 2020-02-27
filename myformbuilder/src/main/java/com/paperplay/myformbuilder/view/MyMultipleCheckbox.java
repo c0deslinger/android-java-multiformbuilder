@@ -4,14 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -29,7 +27,11 @@ import java.util.ArrayList;
  * Created by Ahmed Yusuf on 18/11/18.
  */
 @SuppressLint("ValidFragment")
-public class MyEdittextCheckbox extends LinearLayout{
+public class MyMultipleCheckbox extends LinearLayout{
+    public enum SelectedBy{
+        ID,
+        VALUE
+    }
     Context context;
     Activity activity;
     LinearLayout formLayout;
@@ -46,6 +48,7 @@ public class MyEdittextCheckbox extends LinearLayout{
     RecyclerView listViewCheckbox;
 
     StringBuilder selectedValue, selectedId;
+    CheckboxAdapter adapter = null;
 
     public static class Builder implements GeneralBuilder<Builder>, Cloneable{
         //required
@@ -154,17 +157,17 @@ public class MyEdittextCheckbox extends LinearLayout{
             return this;
         }
 
-        public MyEdittextCheckbox create(){
-            return new MyEdittextCheckbox(this);
+        public MyMultipleCheckbox create(){
+            return new MyMultipleCheckbox(this);
         }
 
         @Override
-        public MyEdittextCheckbox.Builder clone() throws CloneNotSupportedException{
-            return (MyEdittextCheckbox.Builder)super.clone();
+        public MyMultipleCheckbox.Builder clone() throws CloneNotSupportedException{
+            return (MyMultipleCheckbox.Builder)super.clone();
         }
     }
 
-    public MyEdittextCheckbox(Builder builder) {
+    public MyMultipleCheckbox(Builder builder) {
         super(builder.context, null, builder.defStyleAttr);
         this.context = builder.context;
         this.activity = builder.activity;
@@ -202,7 +205,8 @@ public class MyEdittextCheckbox extends LinearLayout{
             this.formLayout = builder.formLayout;
             this.formLayout.addView(this.view);
         }
-        editTextContent.setOnClickListener(v -> openFormData());
+        createAlertDialog();
+        editTextContent.setOnClickListener(v -> alertDialogMultipleCheckbox.show());
         editTextContent.setKeyListener(null);
     }
 
@@ -214,6 +218,28 @@ public class MyEdittextCheckbox extends LinearLayout{
     public void setValue(String text){
         if(text != null)
             editTextContent.setText(text);
+    }
+
+    public void setSelected(ArrayList<String> dataList, SelectedBy selectedBy){
+        if(dataList!=null && adapter!=null && list!=null) {
+            int n = 0;
+            selectedId = new StringBuilder();
+            selectedValue = new StringBuilder();
+            for (String data : dataList) {
+                for (CheckboxData checkboxData : list) {
+                    if ((selectedBy == SelectedBy.ID && String.valueOf(checkboxData.getId()).equals(data)) ||
+                            (selectedBy == SelectedBy.VALUE && String.valueOf(checkboxData.getValue()).equals(data))) {
+                        checkboxData.setChecked(true);
+                        selectedId.append((n > 0) ? ", " : "").append(checkboxData.getId());
+                        selectedValue.append((n > 0) ? ", " : "").append(checkboxData.getValue());
+                        n++;
+                        break;
+                    }
+                }
+            }
+            editTextContent.setText(selectedValue.toString());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public TextView getTxtTitle() {
@@ -243,7 +269,7 @@ public class MyEdittextCheckbox extends LinearLayout{
     }
 
 
-    void openFormData(){//set up for add data dialog
+    private void createAlertDialog(){
         if(alertDialogMultipleCheckbox == null) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
             LayoutInflater dialogInflater = activity.getLayoutInflater();
@@ -252,10 +278,9 @@ public class MyEdittextCheckbox extends LinearLayout{
             TextView txtTitle = dialogView.findViewById(R.id.txtFormTitle);
             listViewCheckbox = dialogView.findViewById(R.id.listCheckbox);
 
-            CheckboxAdapter adapter = new CheckboxAdapter(context, list);
+            adapter = new CheckboxAdapter(context, list);
             listViewCheckbox.setAdapter(adapter);
             listViewCheckbox.setLayoutManager(new LinearLayoutManager(activity.getBaseContext()));
-
 
             txtTitle.setText(title);
             dialogBuilder.setPositiveButton("Save", (dialog, which) -> {
@@ -279,8 +304,6 @@ public class MyEdittextCheckbox extends LinearLayout{
 
             alertDialogMultipleCheckbox = dialogBuilder.create();
         }
-        alertDialogMultipleCheckbox.show();
-
     }
 
     public boolean isFilled() {
@@ -309,6 +332,10 @@ public class MyEdittextCheckbox extends LinearLayout{
 
     public String getSelectedId() {
         return selectedId.toString();
+    }
+
+    public ArrayList<CheckboxData> getSelectedCheckbox(){
+        return listSelected;
     }
 
 }

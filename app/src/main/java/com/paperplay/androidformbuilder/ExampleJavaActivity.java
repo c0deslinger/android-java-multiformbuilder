@@ -14,7 +14,7 @@ import com.paperplay.myformbuilder.view.MyAutocomplete;
 import com.paperplay.myformbuilder.view.MyButton;
 import com.paperplay.myformbuilder.view.MyCheckbox;
 import com.paperplay.myformbuilder.view.MyEdittext;
-import com.paperplay.myformbuilder.view.MyEdittextCheckbox;
+import com.paperplay.myformbuilder.view.MyMultipleCheckbox;
 import com.paperplay.myformbuilder.view.MyEdittextMultiple;
 import com.paperplay.myformbuilder.view.MyRadioButton;
 import com.paperplay.myformbuilder.view.MySpinner;
@@ -51,13 +51,17 @@ public class ExampleJavaActivity extends AppCompatActivity{
                     .setTitle("Select").setItem(atcList).setFormLayout(formLayout).create();
             myAutocomplete.setValue("Tiga");
 
-            //create spinner data with checkbox
+            //create multiple checkbox
             ArrayList<CheckboxData> atcListChk = new ArrayList<>();
             atcListChk.add(new CheckboxData(1, "1", "Satu", false));
             atcListChk.add(new CheckboxData(2, "1", "Satu Dua", false));
             atcListChk.add(new CheckboxData(3, "3", "Tiga", false));
-            MyEdittextCheckbox myEdittextCheckbox = new MyEdittextCheckbox.Builder(ExampleJavaActivity.this)
+            MyMultipleCheckbox myMultipleCheckbox = new MyMultipleCheckbox.Builder(ExampleJavaActivity.this)
                     .setTitle("Select Checkbox").setItem(atcListChk).setFormLayout(formLayout).create();
+            ArrayList<String> idSelected = new ArrayList<>();
+            idSelected.add("1");
+            idSelected.add("3");
+            myMultipleCheckbox.setSelected(idSelected, MyMultipleCheckbox.SelectedBy.ID);
 
             //create edittext with search
             MyEdittext edtId = edtBuilder.clone().setTitle("ID").setMode(MyEdittext.Mode.SEARCH).create();
@@ -141,6 +145,7 @@ public class ExampleJavaActivity extends AppCompatActivity{
                             + " Birthdate: " + edtBirthdate.getValue()
                             + " No: " + edtMultiple.getValue("No")
                             + " Zip: " + edtMultiple.getValue("Zip")
+                            + " Checkbox: " + myMultipleCheckbox.getSelectedId()
                             + " City: " + spinCity.getSelectedValue() +" - "+spinCity.getSelectedId()+" - "+spinCity.getSelectedSecondaryId()
                             + " Education: "+myCheckboxView.getAllChecked()
                             + " Autocomplete: "+myAutocomplete.getSelectedValue()+" "+myAutocomplete.getSelectedData().toString()))
