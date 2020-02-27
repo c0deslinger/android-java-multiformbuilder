@@ -242,6 +242,14 @@ public class MyMultipleCheckbox extends LinearLayout{
         }
     }
 
+    public void updateListCheckbox(ArrayList<CheckboxData> list){
+        this.list.clear();
+        this.list.addAll(list);
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public TextView getTxtTitle() {
         return txtTitle;
     }
