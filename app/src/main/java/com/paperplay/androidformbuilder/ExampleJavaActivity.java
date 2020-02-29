@@ -53,9 +53,12 @@ public class ExampleJavaActivity extends AppCompatActivity{
 
             //create multiple checkbox
             ArrayList<CheckboxData> atcListChk = new ArrayList<>();
-            atcListChk.add(new CheckboxData(1, "1", "Satu", false));
-            atcListChk.add(new CheckboxData(2, "1", "Satu Dua", false));
-            atcListChk.add(new CheckboxData(3, "3", "Tiga", false));
+//            atcListChk.add(new CheckboxData(1, "1", "Satu", false));
+//            atcListChk.add(new CheckboxData(2, "1", "Satu Dua", false));
+//            atcListChk.add(new CheckboxData(3, "3", "Tiga", false));
+            for (int i = 0; i < 20; i++) {
+                atcListChk.add(new CheckboxData(i, "1", "data "+i, false));
+            }
             MyMultipleCheckbox myMultipleCheckbox = new MyMultipleCheckbox.Builder(ExampleJavaActivity.this)
                     .setTitle("Select Checkbox").setItem(new ArrayList<>()).setFormLayout(formLayout).create();
             myMultipleCheckbox.updateListCheckbox(atcListChk);

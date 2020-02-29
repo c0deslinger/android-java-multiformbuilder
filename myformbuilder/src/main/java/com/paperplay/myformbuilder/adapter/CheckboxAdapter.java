@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.paperplay.myformbuilder.R;
@@ -38,11 +37,13 @@ public class CheckboxAdapter extends RecyclerView.Adapter<CheckboxAdapter.Checkb
 
     @Override
     public void onBindViewHolder(@NonNull CheckboxViewHolder checkboxViewHolder, int i) {
-        checkboxViewHolder.rowTitle.setText(checkboxDataList.get(i).getValue());
-        checkboxViewHolder.checkBox.setChecked(checkboxDataList.get(i).isChecked());
+        final CheckboxData checkboxData = checkboxDataList.get(i);
+        checkboxViewHolder.rowTitle.setText(checkboxData.getValue());
+        checkboxViewHolder.checkBox.setChecked(checkboxData.isChecked());
         checkboxViewHolder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            checkboxDataList.get(i).setChecked(isChecked);
+            checkboxData.setChecked(isChecked);
         });
+
     }
 
     public List<CheckboxData> getCheckboxListChecked() {
@@ -52,7 +53,7 @@ public class CheckboxAdapter extends RecyclerView.Adapter<CheckboxAdapter.Checkb
                 listChecked.add(checkboxData);
             }
         }
-        return checkboxDataList;
+        return listChecked;
     }
 
     @Override
@@ -69,6 +70,7 @@ public class CheckboxAdapter extends RecyclerView.Adapter<CheckboxAdapter.Checkb
             super(itemView);
             rowTitle = itemView.findViewById(R.id.txtRowCheckboxTitle);
             checkBox = itemView.findViewById(R.id.checkboxSelected);
+            this.setIsRecyclable(false);
         }
     }
 }
