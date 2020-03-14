@@ -335,11 +335,19 @@ public class MyMultipleCheckbox extends LinearLayout{
     }
 
     public String getSelectedValue() {
-        return selectedValue.toString();
+        try {
+            return selectedValue.toString();
+        }catch (NullPointerException e){
+            return null;
+        }
     }
 
     public String getSelectedId() {
-        return selectedId.toString();
+        try {
+            return selectedId.toString();
+        }catch (NullPointerException e){
+            return null;
+        }
     }
 
     public ArrayList<CheckboxData> getSelectedCheckbox(){
