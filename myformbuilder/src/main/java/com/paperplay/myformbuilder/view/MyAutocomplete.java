@@ -188,7 +188,9 @@ public class MyAutocomplete extends LinearLayout {
                 R.layout.row_autocomplete, this.itemDropDown);
         autoCompleteTextView.setAdapter(autocompleteAdapter);
         autoCompleteTextView.setThreshold(1);
-        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> autocompleteDataSelected = item.get(position));
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            autocompleteDataSelected = (AutocompleteData) parent.getItemAtPosition(position);
+        });
         if(defaultSelectedValue != null){
             setValue(defaultSelectedValue);
         }
@@ -241,12 +243,11 @@ public class MyAutocomplete extends LinearLayout {
 
     public void setValue(String value){
         if(value != null) {
-            AutocompleteData autocompleteData = null;
+//            AutocompleteData autocompleteData = null;
             for (AutocompleteData data : itemDropDown){
                 if(data.getValue().equals(value)) {
-                    autocompleteData = data;
                     autoCompleteTextView.setText(value);
-                    autocompleteDataSelected = autocompleteData;
+                    autocompleteDataSelected = data;
                     validValue = true;
                     break;
                 }
@@ -260,7 +261,7 @@ public class MyAutocomplete extends LinearLayout {
             for (AutocompleteData data : itemDropDown){
                 if(data.getId() == id) {
                     autocompleteData = data;
-                    validValue = false;
+                    validValue = true;
                     break;
                 }
             }
